@@ -14,10 +14,10 @@ export default {
   },
   scene: [LoadScene, DemoScene],
   physics: {
-      default: "arcade",
-      arcade:{
-        gravity: { y: 0},
-        debug: false
-      }
-    }
+    default: "arcade",
+    arcade: {
+      gravity: { y: 100 },
+      debug: false,
+    },
+  },
 };

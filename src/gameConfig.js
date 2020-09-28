@@ -13,4 +13,11 @@ export default {
     background: ["#FD7400", "#FFE11A", "#BEDB39", "#1F8A70", "#004358"],
   },
   scene: [LoadScene, DemoScene],
+  physics: {
+      default: "arcade",
+      arcade:{
+        gravity: { y: 0},
+        debug: false
+      }
+    }
 };

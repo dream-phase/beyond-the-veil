@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import tiles from "../assets/tiles/*.png";
 import sky from "../assets/sky.png";
+import dialoguebox from "../assets/dialoguebox.png";
 
 export default class LoadScene extends Phaser.Scene {
   constructor() {
@@ -14,6 +15,7 @@ export default class LoadScene extends Phaser.Scene {
       self.load.image(tile, tiles[tile]);
     });
     self.load.image("sky", sky);
+    self.load.image("dialoguebox", dialoguebox);
   }
 
   update() {

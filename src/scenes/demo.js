@@ -1,5 +1,7 @@
 import Phaser from "phaser";
 import wonderland from "../assets/sounds/alexander-nakarada-wonderland.mp3";
+import Dialogue from "../dialogue";
+import demoDialogue from "../dialogues/demoDialogue.json";
 
 export default class DemoScene extends Phaser.Scene {
   constructor() {
@@ -11,8 +13,8 @@ export default class DemoScene extends Phaser.Scene {
   }
 
   create() {
-    this.add.image(0, 0, "sky").setScale(3);
-    this.player = this.physics.add.sprite(300, 800, "player1");
+    this.add.image(350, 350, "sky").setScale(0.7);
+    this.player = this.physics.add.sprite(300, 100, "player1");
     this.player.setBounce(0.2);
     this.player.setCollideWorldBounds(true);
     this.player.setScale(2.2);
@@ -28,6 +30,8 @@ export default class DemoScene extends Phaser.Scene {
     this.music = this.sound.add("wonderland");
     this.music.loop = true;
     this.music.play();
+    this.conversation = new Dialogue(demoDialogue, this);
+    this.conversation.startDialogue();
   }
 
   update() {
@@ -35,6 +39,9 @@ export default class DemoScene extends Phaser.Scene {
   }
 
   movePlayerManager() {
+    if (this.inDialogue) {
+      return;
+    }
     if (this.cursorKeys.left.isDown) {
       if (this.shift.isDown) {
         this.player.setVelocityX(-300);

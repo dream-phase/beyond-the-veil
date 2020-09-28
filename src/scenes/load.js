@@ -3,6 +3,7 @@ import tiles from "../assets/tiles/*.png";
 import sky from "../assets/sky.png";
 import player1 from "../assets/player1.png";
 import playerJson from "../assets/player.json";
+import dialoguebox from "../assets/dialoguebox.png";
 
 export default class LoadScene extends Phaser.Scene {
   constructor() {
@@ -18,6 +19,7 @@ export default class LoadScene extends Phaser.Scene {
     self.load.image("sky", sky);
 
     self.load.atlas("player1", player1, playerJson);
+    self.load.image("dialoguebox", dialoguebox);
   }
   create() {
     this.anims.create({

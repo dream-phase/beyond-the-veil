@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 import Phaser from "phaser";
 import tiles from "../assets/tiles/*.png";
 import sky from "../assets/sky.png";

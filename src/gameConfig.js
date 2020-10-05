@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 import Phaser from "phaser";
 import LoadScene from "./scenes/load";
 import DemoScene from "./scenes/demo";
@@ -13,4 +14,11 @@ export default {
     background: ["#FD7400", "#FFE11A", "#BEDB39", "#1F8A70", "#004358"],
   },
   scene: [LoadScene, DemoScene],
+  physics: {
+    default: "arcade",
+    arcade: {
+      gravity: { y: 100 },
+      debug: false,
+    },
+  },
 };

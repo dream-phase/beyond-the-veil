@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 import Phaser from "phaser";
 import gameConfig from "./gameConfig";
 

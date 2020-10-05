@@ -5,8 +5,8 @@ import DemoScene from "./scenes/demo";
 
 export default {
   type: Phaser.AUTO,
-  width: 1000,
-  height: 600,
+  width: 1700, //1000
+  height: 970, //600
   title: "Beyond the Veil",
   url: "https://github.com/dreamp-phase/beyond-the-veil",
   banner: {
@@ -15,6 +15,7 @@ export default {
   },
   scene: [LoadScene, DemoScene],
   physics: {
+    //we should convert from arcade to matter later to allow for custom collision shapes
     default: "arcade",
     arcade: {
       gravity: { y: 100 },

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="2" height="4" tilewidth="70" tileheight="70" infinite="0" nextlayerid="3" nextobjectid="3">
+ <tileset firstgid="1" name="btv" tilewidth="70" tileheight="70" tilecount="175" columns="35">
+  <image source="tiles/tiles_spritesheet.png" width="2450" height="350"/>
+  <tile id="75">
+   <objectgroup draworder="index">
+    <object id="2" x="69.9688" y="0">
+     <polygon points="0,0 -70.2188,70 0.03125,69.75"/>
+    </object>
+   </objectgroup>
+  </tile>
+ </tileset>
+ <objectgroup id="2" name="door">
+  <object id="1" gid="61" x="0" y="280" width="140" height="140"/>
+  <object id="2" gid="62" x="0" y="140" width="140" height="140"/>
+ </objectgroup>
+</map>

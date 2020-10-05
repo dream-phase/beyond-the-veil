@@ -21,7 +21,6 @@
   "homepage": "https://github.com/dream-phase/beyond-the-veil#readme",
   "dependencies": {
     "parcel": "^1.12.4",
-    "phaser": "^3.24.1",
-    "prettier": "^2.1.2"
+    "phaser": "^3.24.1"
   }
 }

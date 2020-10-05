@@ -23,7 +23,9 @@ export default class Dialogue {
     const self = this;
     this.game.inDialogue = true;
     const dialogueLeaf = this.currentNode[this.lineIndex];
-    this.dialogueBox = this.game.add.image(500, 520, "dialoguebox");
+    this.dialogueBox = this.game.add.image(600, 520, "dialoguebox");
+    this.dialogueBox.setScale(1.2, 1);
+    this.dialogueBox.setScrollFactor(0);
     this.dialogueBox.setInteractive();
     this.dialogueBox.on(
       "clicked",
@@ -37,7 +39,8 @@ export default class Dialogue {
     this.speakerText = this.game.add
       .text(65, 445, dialogueLeaf.speaker)
       .setFontSize(24)
-      .setColor("white");
+      .setColor("white")
+      .setScrollFactor(0);
     this.speakerText.setInteractive();
     this.speakerText.on("clicked", this.playNextLine, this);
     this.lineText = this.game.add
@@ -45,7 +48,8 @@ export default class Dialogue {
         wordWrap: { width: 800, useAdvancedWrap: true },
       })
       .setFontSize(24)
-      .setColor("black");
+      .setColor("black")
+      .setScrollFactor(0);
     this.lineText.setInteractive();
     this.lineText.on("clicked", this.playNextLine, this);
   }
@@ -77,10 +81,12 @@ export default class Dialogue {
       this.hasToMakeChoice = true;
       this.lineText.setText("");
       dialogueLeaf.choices.forEach((choice, i) => {
-        const textObj = this.game.add.text(50, 495 + i * 32, choice[0].line, {
-          font: "24px",
-          wordwrap: 500,
-        });
+        const textObj = this.game.add
+          .text(50, 495 + i * 32, choice[0].line, {
+            font: "24px",
+            wordwrap: 500,
+          })
+          .setScrollFactor(0);
         textObj.setColor("black");
         this.choiceTexts.push(textObj);
       });

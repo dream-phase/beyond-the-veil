@@ -1,11 +1,12 @@
+/*jshint esversion: 6 */
 import Phaser from "phaser";
 import LoadScene from "./scenes/load";
 import DemoScene from "./scenes/demo";
 
 export default {
   type: Phaser.AUTO,
-  width: 1000,
-  height: 600,
+  width: 1200, //1000
+  height: 600, //600
   title: "Beyond the Veil",
   url: "https://github.com/dreamp-phase/beyond-the-veil",
   banner: {
@@ -14,6 +15,7 @@ export default {
   },
   scene: [LoadScene, DemoScene],
   physics: {
+    //we should convert from arcade to matter later to allow for custom collision shapes
     default: "arcade",
     arcade: {
       gravity: { y: 100 },

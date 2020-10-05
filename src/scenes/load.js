@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 import Phaser from "phaser";
 import tiles from "../assets/tiles/*.png";
 import sky from "../assets/sky.png";
@@ -21,6 +22,7 @@ export default class LoadScene extends Phaser.Scene {
     self.load.atlas("player1", player1, playerJson);
     self.load.image("dialoguebox", dialoguebox);
   }
+
   create() {
     this.anims.create({
       key: "walk",

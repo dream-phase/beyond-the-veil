@@ -12,12 +12,14 @@ import ts from "../assets/tiles/tiles_spritesheet.png";
 import mt from "../assets/map_tiled.json";
 import door from "../assets/door.png";
 import heroine from "../assets/heroine01.png";
+import inventory from "../assets/inventory.png";
 
 export default class DemoScene extends Phaser.Scene {
   constructor() {
     super({ key: "demo" });
     //var cursors;
   }
+
 
   preload() {
     this.load.audio("wonderland", wonderland);
@@ -35,8 +37,12 @@ export default class DemoScene extends Phaser.Scene {
     this.load.image("door", door);
     this.load.image("heroine", heroine);
 
+    this.load.image("inventory",inventory);
+
     //Loading exported TiledMap created in Tiled
     this.load.tilemapTiledJSON("map", mt);
+
+
   }
 
   create() {
@@ -44,6 +50,11 @@ export default class DemoScene extends Phaser.Scene {
     this.shift = this.input.keyboard.addKey(
       Phaser.Input.Keyboard.KeyCodes.SHIFT
     );
+    this.ikey = this.input.keyboard.addKey(
+      Phaser.Input.Keyboard.KeyCodes.I
+    );
+
+
 
     this.music = this.sound.add("wonderland");
     this.music.loop = true;
@@ -74,10 +85,8 @@ export default class DemoScene extends Phaser.Scene {
     var supports = maps.createStaticLayer("supports", tileset, 0, 0);
 
     this.NPCs = this.physics.add.staticGroup();
-    this.cursorKeys = this.input.keyboard.createCursorKeys();
-    this.shift = this.input.keyboard.addKey(
-      Phaser.Input.Keyboard.KeyCodes.SHIFT
-    );
+
+
 
     this.npc = this.physics.add.sprite(700, 700, "heroine");
     this.npc.setScale(1.5);
@@ -103,6 +112,11 @@ export default class DemoScene extends Phaser.Scene {
     this.player.body.setGravityY(300);
     this.player.setFrame("idle/idle-0.png");
     this.physics.add.collider(this.player, platforms);
+
+    this.inventoryContent = [];
+    this.inventoryOpen = false;
+    this.inventory = this.add.image(this.player.x,this.player.y,"inventory");
+    this.inventory.visible = false;
   }
 
   update() {
@@ -110,7 +124,28 @@ export default class DemoScene extends Phaser.Scene {
     var scrol_y = this.player.y - this.game.config.height / 2 - 100;
     this.cameras.main.scrollX = scrol_x; ///  scrollX - Х top left point of camera
     this.cameras.main.scrollY = scrol_y;
-    this.movePlayerManager();
+    this.inventory.x = this.player.x+200;
+    this.inventory.y = this.player.y-150;
+    if (Phaser.Input.Keyboard.JustDown(this.ikey)){
+      this.inventory.visible = !this.inventory.visible;
+    }
+    if (!this.inventory.visible) {
+      this.movePlayerManager();
+    }
+    else {
+      this.player.setFrame("idle/idle-0.png");
+      this.inventoryManager();
+    }
+
+
+
+
+
+  }
+
+  inventoryManager(){
+    // move around inventory
+
   }
 
   movePlayerManager() {

@@ -12,6 +12,10 @@ import ts from "../assets/tiles/tiles_spritesheet.png";
 import mt from "../assets/map_tiled.json";
 import door from "../assets/door.png";
 import heroine from "../assets/heroine01.png";
+import doorpng from "../assets/door.png";
+import Player from "../player.js";
+import PhaserMatterCollisionPlugin from "phaser-matter-collision-plugin";
+import multiKey from "../multiKey.js";
 
 export default class DemoScene extends Phaser.Scene {
   constructor() {
@@ -32,11 +36,22 @@ export default class DemoScene extends Phaser.Scene {
     this.load.onLoadComplete.add(loadComplete, this);*/
     this.load.image("tilessheet", ts);
     this.load.image("sky", sky);
-    this.load.image("door", door);
+    this.load.image("door", doorpng);
     this.load.image("heroine", heroine);
 
     //Loading exported TiledMap created in Tiled
     this.load.tilemapTiledJSON("map", mt);
+    const {
+      ENTER,
+      LEFT,
+      RIGHT,
+      UP,
+      SHIFT,
+      A,
+      D,
+      W,
+    } = Phaser.Input.Keyboard.KeyCodes;
+    this.enterInput = new multiKey(this, [ENTER]);
   }
 
   create() {
@@ -62,28 +77,45 @@ export default class DemoScene extends Phaser.Scene {
     var bg = maps.createStaticLayer("bg", tileset, 0, 0);
 
     var noCol = maps.createStaticLayer("noCol", tileset, 0, 0);
-    noCol.setCollisionByExclusion(-1, false);
+    //noCol.setCollisionByProperty({ collides: false});
     //create platforms and set tile collision
+    var bounds = maps.createStaticLayer("bounds", tileset, 0, 0);
     var platforms = maps.createStaticLayer("platforms", tileset, 0, 0);
     //enables collision for all indices using -1
-    platforms.setCollisionByExclusion(-1, true);
+    bounds.setCollisionByProperty({ collides: true });
+    platforms.setCollisionByProperty({ collides: true });
+    this.matter.world.convertTilemapLayer(platforms);
+    this.matter.world.convertTilemapLayer(bounds);
     var water3 = maps.createStaticLayer("water3", tileset, 0, 0);
     var water2 = maps.createStaticLayer("water2", tileset, 0, 0);
     var water = maps.createStaticLayer("water", tileset, 0, 0);
     var windows = maps.createStaticLayer("windows", tileset, 0, 0);
     var supports = maps.createStaticLayer("supports", tileset, 0, 0);
+    var doorLayer = maps.getObjectLayer("doors");
+    //this.matter.world.setBounds(0, 0, sky.widthInPixels-300, sky.heightInPixels-300, true, true, true, true);
 
-    this.NPCs = this.physics.add.staticGroup();
     this.cursorKeys = this.input.keyboard.createCursorKeys();
     this.shift = this.input.keyboard.addKey(
       Phaser.Input.Keyboard.KeyCodes.SHIFT
     );
 
-    this.npc = this.physics.add.sprite(700, 700, "heroine");
-    this.npc.setScale(1.5);
-    this.npc.body.setGravityY(300);
-    this.physics.add.collider(this.npc, platforms);
+    // this.npc = this.matter.add.sprite(700, 700, "heroine");
+    // this.npc.setScale(1.5);
+    // this.npc.body.setGravityY(300);
+    // this.physics.add.collider(this.npc, platforms);
 
+    //var door = this.add.image(100,100,)
+
+    this.player = new Player(this, 600, 300);
+    this.unsubscribePlayerCollide = this.matterCollision.addOnCollideStart({
+      objectA: this.player.sprite,
+      callback: this.onPlayerCollide,
+      context: this,
+    });
+
+    //this.npc = this.matter.add.sprite(700,200,"heroine");
+    //this.npc.setScale(1.5);
+    //this.npc.setCollideWorldBounds(true);
     //var heroine = this.load.image(200,200,'heroine');
 
     //adding door, will make into functioning object later
@@ -91,72 +123,35 @@ export default class DemoScene extends Phaser.Scene {
     /*this.door = this.physics.add.group({
       allowGravity = false,
       immovable = true
-    });
-
-    this.door = this.createDoors();
-    this.physics.add.overlap(this.player, this.door,this.handleOverlap)*/
+    });*/
+    //not functioning correctly
+    var doorGroup = this.add.group();
+    maps.createFromObjects("doors", "door", doorpng);
+    //const door = maps.findObject("Objects", obj => obj.name === "doors");
+    //doors = this.matter.add.sprite(door.x, door.y, "actualDoor", null);
     //this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+  }
 
-    this.player = this.physics.add.sprite(400, 700, "player1");
-    this.player.setBounce(0.2);
-    this.player.setScale(2.2);
-    this.player.body.setGravityY(300);
-    this.player.setFrame("idle/idle-0.png");
-    this.physics.add.collider(this.player, platforms);
+  onPlayerCollide({ gameObjectB }) {
+    if (!gameObjectB || !(gameObjectB instanceof Phaser.Tilemaps.Tile)) return;
+
+    const tile = gameObjectB;
+    const isEnterKeyDown = this.enterInput.isDown();
+
+    // Check the tile property set in Tiled (you could also just check the index if you aren't using
+    // Tiled in your game)
+    if (tile.properties.isDoor && this.player.enterInput) {
+      // Unsubscribe from collision events so that this logic is run only once
+      this.unsubscribePlayerCollide();
+
+      this.player.freeze();
+      const cam = this.cameras.main;
+      cam.fade(250, 0, 0, 0);
+      cam.once("camerafadeoutcomplete", () => this.scene.restart());
+    }
   }
 
   update() {
-    var scrol_x = this.player.x - this.game.config.width / 2 + 200;
-    var scrol_y = this.player.y - this.game.config.height / 2 - 100;
-    this.cameras.main.scrollX = scrol_x; ///  scrollX - Х top left point of camera
-    this.cameras.main.scrollY = scrol_y;
-    this.movePlayerManager();
-  }
-
-  movePlayerManager() {
-    if (this.inDialogue) {
-      this.player.setVelocityX(0);
-      this.player.setFrame("idle/idle-0.png");
-      return;
-    }
-    if (this.cursorKeys.left.isDown) {
-      if (this.shift.isDown) {
-        this.player.setVelocityX(-300);
-        if (this.player.body.onFloor()) {
-          this.player.play("run", true);
-        }
-      } else {
-        this.player.setVelocityX(-100);
-        if (this.player.body.onFloor()) {
-          this.player.play("walk", true);
-        }
-      }
-
-      this.player.flipX = true;
-    } else if (this.cursorKeys.right.isDown) {
-      if (this.shift.isDown) {
-        this.player.setVelocityX(300);
-        if (this.player.body.onFloor()) {
-          this.player.play("run", true);
-        }
-        this.player.flipX = false;
-      } else {
-        this.player.setVelocityX(100);
-        if (this.player.body.onFloor()) {
-          this.player.play("walk", true);
-        }
-        this.player.flipX = false;
-      }
-    } else {
-      this.player.setVelocityX(0);
-      this.player.setFrame("idle/idle-0.png");
-    }
-    if (
-      this.cursorKeys.up.isDown &&
-      (this.player.body.onFloor() || this.player.body.touching.down)
-    ) {
-      this.player.setVelocityY(-250);
-      this.player.play("jump", true);
-    }
+    this.cameras.main.startFollow(this.player.sprite);
   }
 }

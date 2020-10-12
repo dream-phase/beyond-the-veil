@@ -2,6 +2,8 @@
 import Phaser from "phaser";
 import LoadScene from "./scenes/load";
 import DemoScene from "./scenes/demo";
+import { Engine, Render, World, Bodies, Body } from "matter-js";
+import PhaserMatterCollisionPlugin from "phaser-matter-collision-plugin";
 
 export default {
   type: Phaser.AUTO,
@@ -15,11 +17,19 @@ export default {
   },
   scene: [LoadScene, DemoScene],
   physics: {
-    //we should convert from arcade to matter later to allow for custom collision shapes
-    default: "arcade",
-    arcade: {
-      gravity: { y: 100 },
-      debug: false,
+    //converted to Matter-js to allow for polygon collision boxes
+    default: "matter",
+    matter: {
+      debug: true,
     },
+  },
+  plugins: {
+    scene: [
+      {
+        plugin: PhaserMatterCollisionPlugin,
+        key: "matterCollision",
+        mapping: "matterCollision",
+      },
+    ],
   },
 };

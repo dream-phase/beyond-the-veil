@@ -109,14 +109,20 @@ export default class DemoScene extends Phaser.Scene {
     this.matter.world.convertTilemapLayer(doortile);
     //this.matter.world.setBounds(0, 0, sky.widthInPixels-300, sky.heightInPixels-300, true, true, true, true);
 
-    //var door = this.add.image(100,100,)
-    /*this.matterCollision.addOnCollideStart({
+    this.player = new Player(this, 600, 300);
+    this.unsubscribePlayerCollide = this.matterCollision.addOnCollideStart({
       objectA: this.player.sprite,
-      objectB: doorLayer.sprite,
-      callback: eventData => {
-        this.onNextScene();
-      }
-    });*/
+      callback: this.onPlayerCollide,
+      context: this,
+    });
+
+    // this.npc = this.matter.add.sprite(700, 700, "heroine");
+    // this.npc.setScale(1.5);
+    // this.npc.body.setGravityY(300);
+    // this.physics.add.collider(this.npc, platforms);
+
+    var door = this.add.image(100, 100);
+
     //this.npc = this.matter.add.sprite(700,200,"heroine");
     //this.npc.setScale(1.5);
     //this.npc.setCollideWorldBounds(true);
@@ -184,7 +190,6 @@ export default class DemoScene extends Phaser.Scene {
     //doors = this.matter.add.sprite(door.x, door.y, "actualDoor", null);
     this.cameras.main.setBounds(0, 0, maps.widthInPixels, maps.heightInPixels);
   }
-
   onPlayerCollide({ gameObjectB }) {
     if (!gameObjectB || !(gameObjectB instanceof Phaser.Tilemaps.Tile)) return;
     //console.log("You hit something!",console.log(gameObjectB.properties));

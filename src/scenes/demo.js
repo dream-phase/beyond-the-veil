@@ -94,17 +94,21 @@ export default class DemoScene extends Phaser.Scene {
     var doorLayer = maps.getObjectLayer("doors");
     //this.matter.world.setBounds(0, 0, sky.widthInPixels-300, sky.heightInPixels-300, true, true, true, true);
 
-    this.cursorKeys = this.input.keyboard.createCursorKeys();
-    this.shift = this.input.keyboard.addKey(
-      Phaser.Input.Keyboard.KeyCodes.SHIFT
-    );
+    //var door = this.add.image(100,100,)
+
+    this.player = new Player(this, 600, 300);
+    this.unsubscribePlayerCollide = this.matterCollision.addOnCollideStart({
+      objectA: this.player.sprite,
+      callback: this.onPlayerCollide,
+      context: this,
+    });
 
     // this.npc = this.matter.add.sprite(700, 700, "heroine");
     // this.npc.setScale(1.5);
     // this.npc.body.setGravityY(300);
     // this.physics.add.collider(this.npc, platforms);
 
-    var door = this.add.image(100, 100);
+    var door = this.add.image(100, 100, "doorpng");
 
     //this.npc = this.matter.add.sprite(700,200,"heroine");
     //this.npc.setScale(1.5);
@@ -159,7 +163,6 @@ export default class DemoScene extends Phaser.Scene {
       startDialogueObj.startDialogue();
     }, 100);
   }
-
   onPlayerCollide({ gameObjectB }) {
     if (!gameObjectB || !(gameObjectB instanceof Phaser.Tilemaps.Tile)) return;
 

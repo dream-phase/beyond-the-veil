@@ -5,6 +5,7 @@ import sky from "../assets/sky.png";
 import player1 from "../assets/player1.png";
 import playerJson from "../assets/player.json";
 import dialoguebox from "../assets/dialoguebox.png";
+import PhaserMatterCollisionPlugin from "phaser-matter-collision-plugin";
 
 export default class LoadScene extends Phaser.Scene {
   constructor() {

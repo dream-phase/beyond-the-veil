@@ -1,0 +1,17 @@
+{
+  "subtree": [
+    {
+      "speaker": "Oracle",
+      "line": "Woah."
+    },
+    {
+      "speaker": "Oracle",
+      "line": "What a strange place."
+    },
+    {
+      "speaker": "Oracle",
+      "line": "I see a castle in atop that hill. I wonder what lies inside.",
+      "end": true
+    }
+  ]
+}

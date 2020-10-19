@@ -15,6 +15,7 @@ import doorpng from "../assets/door.png";
 import Player from "../player.js";
 import PhaserMatterCollisionPlugin from "phaser-matter-collision-plugin";
 import multiKey from "../multiKey.js";
+import startDialogue from "../dialogues/demoLevel.json";
 
 export default class DemoScene extends Phaser.Scene {
   constructor() {
@@ -54,18 +55,18 @@ export default class DemoScene extends Phaser.Scene {
   }
 
   create() {
+    const self = this;
     this.cursorKeys = this.input.keyboard.createCursorKeys();
     this.shift = this.input.keyboard.addKey(
       Phaser.Input.Keyboard.KeyCodes.SHIFT
     );
-
     this.music = this.sound.add("wonderland");
     this.music.loop = true;
     this.music.play();
     var conversation = new Dialogue(demoDialogue, this);
-    setTimeout(() => {
-      conversation.startDialogue();
-    }, 4000);
+    // setTimeout(() => {
+    //   conversation.startDialogue();
+    // }, 4000);
     //double check this to make sure it scales w browser
     var maps = this.make.tilemap({ key: "map" });
     var tileset = maps.addTilesetImage("btv", "tilessheet");
@@ -105,16 +106,6 @@ export default class DemoScene extends Phaser.Scene {
 
     var door = this.add.image(100, 100);
 
-    this.player = new Player(this, 600, 300);
-    const self = this;
-    setTimeout(() => {
-      self.unsubscribePlayerCollide = self.matterCollision.addOnCollideStart({
-        objectA: this.player.sprite,
-        callback: this.onPlayerCollide,
-        context: this,
-      });
-    }, 400);
-
     //this.npc = this.matter.add.sprite(700,200,"heroine");
     //this.npc.setScale(1.5);
     //this.npc.setCollideWorldBounds(true);
@@ -132,6 +123,41 @@ export default class DemoScene extends Phaser.Scene {
     //const door = maps.findObject("Objects", obj => obj.name === "doors");
     //doors = this.matter.add.sprite(door.x, door.y, "actualDoor", null);
     //this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+    this.key = this.matter.add.sprite(1600, 600, "key");
+    this.key.label = "key";
+    this.key.setScale(0.2);
+
+    this.player = new Player(this, 200, 500);
+    setTimeout(() => {
+      self.unsubscribePlayerCollide = self.matterCollision.addOnCollideStart({
+        objectA: this.player.sprite,
+        callback: this.onPlayerCollide,
+        context: this,
+      });
+    }, 400);
+
+    this.matter.world.on("collisionstart", (event, bodyA, bodyB) => {
+      if (
+        (bodyA.gameObject &&
+          bodyA.gameObject.label == "key" &&
+          bodyB.gameObject &&
+          bodyB.gameObject.label == "wizard") ||
+        (bodyB.gameObject &&
+          bodyB.gameObject.label == "key" &&
+          bodyA.gameObject &&
+          bodyA.gameObject.label == "wizard")
+      ) {
+        this.player.inventory.add("key", {
+          name: "key",
+          description: "Very large",
+        });
+        this.key.destroy();
+      }
+    });
+    const startDialogueObj = new Dialogue(startDialogue, this);
+    setTimeout(() => {
+      startDialogueObj.startDialogue();
+    }, 100);
   }
 
   onPlayerCollide({ gameObjectB }) {

@@ -8,6 +8,7 @@ import playersprite from "./assets/player1.png";
 import playerjson from "./assets/player.json";
 import multiKey from "./multiKey.js";
 import PhaserMatterCollisionPlugin from "phaser-matter-collision-plugin";
+import Inventory from "./inventory";
 
 export default class sprite {
   constructor(scene, x, y) {
@@ -56,7 +57,8 @@ export default class sprite {
     // Matter-js uses the CENTER OF MASS to place objects in the world, we must
     // account for that to place our sprites correctly
 
-    this.sprite = scene.matter.add.sprite(-64, -64, "wizard", null);
+    this.sprite = scene.matter.add.sprite(100, 400, "wizard", null);
+    this.sprite.label = "wizard";
 
     this.sprite.setFrame("Idle/Idle-0.png");
 
@@ -138,11 +140,13 @@ export default class sprite {
       });
     }, 300);
     this.hasAttacked = false;
+    this.inventory = new Inventory(this.scene);
   }
 
   update() {
     //console.log('x=',this.sprite.x,'y=',this.sprite.y);
     this.movePlayerManager();
+    this.inventory.update();
   }
 
   onSensorCollide({ bodyA, bodyB, pair }) {
@@ -176,7 +180,7 @@ export default class sprite {
     const isSprintKeyDown = this.sprintInput.isDown();
     const pointer = this.scene.input.activePointer;
 
-    if (this.scene.inDialogue) {
+    if (this.scene.inDialogue || this.inventory.sprite.visible) {
       sprite.setVelocityX(0);
       sprite.setFrame("Idle/Idle-0.png");
       return;

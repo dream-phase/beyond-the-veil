@@ -2,12 +2,14 @@
 import Phaser from "phaser";
 import tiles from "../assets/tiles/*.png";
 import sky from "../assets/sky.png";
+import key from "../assets/key.png";
 import wizard from "../assets/wizard.png";
 import wizardJson from "../assets/wizard.json";
 import dialoguebox from "../assets/dialoguebox.png";
 import PhaserMatterCollisionPlugin from "phaser-matter-collision-plugin";
 import Dialogue from "../dialogue";
 import tutorial from "../dialogues/tutorial.json";
+import inventory from "../assets/inventory.png";
 
 export default class LoadScene extends Phaser.Scene {
   constructor() {
@@ -21,6 +23,8 @@ export default class LoadScene extends Phaser.Scene {
       self.load.image(tile, tiles[tile]);
     });
     self.load.image("sky", sky);
+    self.load.image("key", key);
+    self.load.image("inventory", inventory);
 
     self.load.atlas("wizard", wizard, wizardJson);
     self.load.image("dialoguebox", dialoguebox);

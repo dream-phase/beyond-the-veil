@@ -189,6 +189,18 @@ export default class DemoScene extends Phaser.Scene {
     //const door = maps.findObject("Objects", obj => obj.name === "doors");
     //doors = this.matter.add.sprite(door.x, door.y, "actualDoor", null);
     this.cameras.main.setBounds(0, 0, maps.widthInPixels, maps.heightInPixels);
+    this.unsubscribePlayerCollide = this.matterCollision.addOnCollideStart({
+      objectA: this.player.sprite,
+      callback: this.onPlayerCollide,
+      context: this,
+    });
+  }
+  onNextScene() {
+    this.player.freeze();
+    //const cam = this.cameras.main;
+    //cam.fade(250, 0, 0, 0);
+    this.scene.start("lvl2");
+    //cam.once("camerafadeoutcomplete", () => this.scene.start("lvl2"));
   }
   onPlayerCollide({ gameObjectB }) {
     if (!gameObjectB || !(gameObjectB instanceof Phaser.Tilemaps.Tile)) return;
@@ -216,6 +228,11 @@ export default class DemoScene extends Phaser.Scene {
     this.scene.start("lvl2");
     //cam.once("camerafadeoutcomplete", () => this.scene.start("lvl2"));
   }
+  //checkOverlap(player, door){
+  //  var playerbounds = player.getBounds();
+  //  var doorbounds = door.getBounds();
+  //  return Phaser.Rectangle.intersects(playerbounds,doorbounds);
+  //}
   update() {
     const isEnterKeyDown = this.enterInput.isDown();
     if (!this.player.destroyed) {

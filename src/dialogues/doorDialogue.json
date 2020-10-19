@@ -1,0 +1,17 @@
+{
+  "subtree": [
+    {
+      "speaker": "Oracle",
+      "line": "I struggle to be able to see white lies within. A barrier holds me back."
+    },
+    {
+      "speaker": "Oracle",
+      "line": "Perhaps I need something to get in."
+    },
+    {
+      "speaker": "Oracle",
+      "line": "I wonder if there's something on this level.",
+      "end": true
+    }
+  ]
+}

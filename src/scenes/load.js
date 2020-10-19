@@ -10,6 +10,7 @@ import PhaserMatterCollisionPlugin from "phaser-matter-collision-plugin";
 import Dialogue from "../dialogue";
 import tutorial from "../dialogues/tutorial.json";
 import inventory from "../assets/inventory.png";
+import gargoyle from "../assets/gargoyle.png";
 
 export default class LoadScene extends Phaser.Scene {
   constructor() {
@@ -25,7 +26,7 @@ export default class LoadScene extends Phaser.Scene {
     self.load.image("sky", sky);
     self.load.image("key", key);
     self.load.image("inventory", inventory);
-
+    self.load.image("gargoyle", gargoyle);
     self.load.atlas("wizard", wizard, wizardJson);
     self.load.image("dialoguebox", dialoguebox);
   }

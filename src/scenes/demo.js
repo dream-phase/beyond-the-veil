@@ -14,6 +14,8 @@ import heroine from "../assets/heroine01.png";
 import Player from "../player.js";
 import PhaserMatterCollisionPlugin from "phaser-matter-collision-plugin";
 import multiKey from "../multiKey.js";
+import inventory from "../assets/inventory.png";
+import lvl2 from "./lvl2.js";
 
 export default class DemoScene extends Phaser.Scene {
   constructor() {
@@ -22,25 +24,18 @@ export default class DemoScene extends Phaser.Scene {
   }
 
   preload() {
-    //just a test sprite for now
-    //this.load.spritesheet('dude', '../assets/dude.png', { frameWidth: 32, frameHeight: 48 });
-    //load sky
-    //Load player json/atlas for animations
-    //this.load.atlas('player', playerjson);
-    //Loading the spritesheet for tiles
-    /*this.load.onLoadStart.add(loadStart, this);
-    this.load.onFileComplete.add(fileComplete, this);
-    this.load.onLoadComplete.add(loadComplete, this);*/
     this.load.image("tilessheet", ts);
     this.load.image("sky", sky);
     this.load.image("door", doorpng);
     this.load.image("heroine", heroine);
+    this.load.image("inventory",inventory);
 
     //Loading exported TiledMap created in Tiled
     this.load.tilemapTiledJSON("map", mt);
 
-    const { ENTER, LEFT, RIGHT, UP, SHIFT, A, D, W } = Phaser.Input.Keyboard.KeyCodes;
+    const { ENTER, LEFT, RIGHT, UP, SHIFT, A, D, W, I } = Phaser.Input.Keyboard.KeyCodes;
     this.enterInput = new multiKey(this, [ENTER]);
+    this.iInput = new multiKey(this, [I]);
   }
 
   create() {
@@ -67,7 +62,10 @@ export default class DemoScene extends Phaser.Scene {
     var water = maps.createStaticLayer("water", tileset, 0, 0);
     var windows = maps.createStaticLayer("windows", tileset, 0, 0);
     var supports = maps.createStaticLayer("supports", tileset, 0, 0);
-    var doorLayer = maps.getObjectLayer('doors');
+    //var doorLayer = this.matter.add.sprite(1300, 440, "door").setScale(0.8);
+    var doortile = maps.createStaticLayer("doortile", tileset, 0, 0);
+    doortile.setCollisionByProperty({ collides: true });
+    this.matter.world.convertTilemapLayer(doortile);
     //this.matter.world.setBounds(0, 0, sky.widthInPixels-300, sky.heightInPixels-300, true, true, true, true);
 
 
@@ -82,7 +80,13 @@ export default class DemoScene extends Phaser.Scene {
       callback: this.onPlayerCollide,
       context: this
     });
-
+    /*this.matterCollision.addOnCollideStart({
+      objectA: this.player.sprite,
+      objectB: doorLayer.sprite,
+      callback: eventData => {
+        this.onNextScene();
+      }
+    });*/
     //this.npc = this.matter.add.sprite(700,200,"heroine");
     //this.npc.setScale(1.5);
     //this.npc.setCollideWorldBounds(true);
@@ -90,37 +94,71 @@ export default class DemoScene extends Phaser.Scene {
 
     //adding door, will make into functioning object later
 
-    /*this.door = this.physics.add.group({
-      allowGravity = false,
-      immovable = true
-    });*/
-    //not functioning correctly
+    this.inventoryContent = [];
+    this.inventoryOpen = false;
+    this.inventory = this.add.image(this.player.x,this.player.y,"inventory");
+    this.inventory.visible = false;
+
+
     var doorGroup = this.add.group();
-    maps.createFromObjects('doors','door',doorpng);
+    //maps.createFromObjects('doors','door',doorpng);
     //const door = maps.findObject("Objects", obj => obj.name === "doors");
     //doors = this.matter.add.sprite(door.x, door.y, "actualDoor", null);
-    //this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-
+    this.cameras.main.setBounds(0, 0, maps.widthInPixels, maps.heightInPixels);
+    this.unsubscribePlayerCollide = this.matterCollision.addOnCollideStart({
+      objectA: this.player.sprite,
+      callback: this.onPlayerCollide,
+      context: this
+    });
+  }
+  onNextScene(){
+    this.player.freeze();
+    //const cam = this.cameras.main;
+    //cam.fade(250, 0, 0, 0);
+    this.scene.start("lvl2");
+    //cam.once("camerafadeoutcomplete", () => this.scene.start("lvl2"));
   }
   onPlayerCollide({ gameObjectB }) {
     if (!gameObjectB || !(gameObjectB instanceof Phaser.Tilemaps.Tile)) return;
-
-    const tile = gameObjectB;
-    const isEnterKeyDown = this.enterInput.isDown();
+    //console.log("You hit something!",console.log(gameObjectB.properties));
+    var tile = gameObjectB;
+    var isEnterKeyDown = this.enterInput.isDown();
 
     // Check the tile property set in Tiled (you could also just check the index if you aren't using
     // Tiled in your game)
-    if (tile.properties.isDoor && this.player.enterInput) {
+    /*if (tile.properties.isDoor) {
       // Unsubscribe from collision events so that this logic is run only once
+      console.log("yes");
       this.unsubscribePlayerCollide();
 
       this.player.freeze();
       const cam = this.cameras.main;
       cam.fade(250, 0, 0, 0);
-      cam.once("camerafadeoutcomplete", () => this.scene.restart());
-    }
+      cam.once("camerafadeoutcomplete", () => this.scene.start(Level2));
+    }*/
   }
+  //checkOverlap(player, door){
+  //  var playerbounds = player.getBounds();
+  //  var doorbounds = door.getBounds();
+  //  return Phaser.Rectangle.intersects(playerbounds,doorbounds);
+  //}
   update() {
-    this.cameras.main.startFollow(this.player.sprite);
+    const isEnterKeyDown = this.enterInput.isDown();
+    const isiKeyDown = this.iInput.isDown();
+    if(!this.player.destroyed){
+      this.cameras.main.startFollow(this.player.sprite);
+    }
+    if(isEnterKeyDown){
+      this.onNextScene();
+    }
+
+
+
+
+
   }
+    //if(this.checkOverlap(this.player.sprite, this.doorLayer)){
+    //  onNextScene();
+    //}
+
 }

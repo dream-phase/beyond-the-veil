@@ -4,13 +4,11 @@
 // https://itnext.io/modular-game-worlds-in-phaser-3-tilemaps-5-matter-physics-platformer-d14d1f614557
 
 import Phaser from "phaser";
-import playersprite from "./assets/player1.png";
-import playerjson from "./assets/player.json";
 import multiKey from "./multiKey.js";
 import PhaserMatterCollisionPlugin from "phaser-matter-collision-plugin";
 import Inventory from "./inventory";
 
-export default class sprite {
+export default class Player {
   constructor(scene, x, y) {
     const self = this;
     this.scene = scene;
@@ -144,6 +142,8 @@ export default class sprite {
   }
 
   update() {
+    //if scene is changing or player is dead do not go to move manager
+    if (this.destroyed) return;
     //console.log('x=',this.sprite.x,'y=',this.sprite.y);
     this.movePlayerManager();
     this.inventory.update();
@@ -234,5 +234,31 @@ export default class sprite {
         sprite.play("Jump", true);
       }
     }
+  }
+  //freeze the player so transitions or deaths can display properly
+  freeze() {
+    this.sprite.setStatic(true);
+  }
+  // destroy methtod for scene change or event of player death
+  destroy() {
+    // Clean up any listeners that might trigger events after the player is officially destroyed
+    this.destroyed = true;
+    this.scene.events.off("update", this.update, this);
+    this.scene.events.off("shutdown", this.destroy, this);
+    this.scene.events.off("destroy", this.destroy, this);
+    if (this.scene.matter.world) {
+      this.scene.matter.world.off("beforeupdate", this.resetTouching, this);
+    }
+    const sensors = [
+      this.sensors.bottom,
+      this.sensors.left,
+      this.sensors.right,
+    ];
+    this.scene.matterCollision.removeOnCollideStart({ objectA: sensors });
+    this.scene.matterCollision.removeOnCollideActive({ objectA: sensors });
+    if (this.jumpCooldownTimer) this.jumpCooldownTimer.destroy();
+    console.log("test");
+
+    this.sprite.destroy();
   }
 }

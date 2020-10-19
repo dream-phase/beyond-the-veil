@@ -1,5 +1,5 @@
 export default class Dialogue {
-  constructor(dialogue, game) {
+  constructor(dialogue, game, onDialogueEnd) {
     this.dialogue = dialogue; // reference to dialogue object
     this.game = game; // reference to phaser this
     this.currentNode = dialogue.subtree;
@@ -9,6 +9,7 @@ export default class Dialogue {
     this.lineText; // text object
     this.choiceTexts = []; // choice text objects;
     this.hasToMakeChoice = false;
+    this.onDialogueEnd = onDialogueEnd ? onDialogueEnd : () => {};
   }
 
   startDialogue() {
@@ -65,6 +66,7 @@ export default class Dialogue {
     this.choiceTexts.forEach((choice) => choice.destroy());
     this.dialogueBox.destroy();
     this.dialogueBox = null;
+    this.onDialogueEnd();
   }
 
   updateText() {
@@ -143,7 +145,7 @@ export default class Dialogue {
       this.updateText();
       // set changes to world state
       if (this.currentNode[this.lineIndex].variables) {
-        Othis.currentNode[this.lineIndex].variables.forEach((variable) => {
+        this.currentNode[this.lineIndex].variables.forEach((variable) => {
           this.game.variables[variable.name] = variable.value;
         });
       }

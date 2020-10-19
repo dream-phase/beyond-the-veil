@@ -1,0 +1,37 @@
+{
+  "subtree": [
+    {
+      "speaker": "Oracle",
+      "line": "Hello..."
+    },
+    {
+      "speaker": "Oracle",
+      "line": "Is somebody there?"
+    },
+    {
+      "speaker": "Oracle",
+      "line": "I seem to have fallen asleep again."
+    },
+    {
+      "speaker": "Oracle",
+      "line": "I see nothing but darkness."
+    },
+    {
+      "speaker": "Oracle",
+      "line": "Alas, as an oracle of the tower, my dreams are never so simple."
+    },
+    {
+      "speaker": "Oracle",
+      "line": "I must find a way out."
+    },
+    {
+      "speaker": "Oracle",
+      "line": "Monsters of the unkown, often find themeselves astray in my dreams."
+    },
+    {
+      "speaker": "Oracle",
+      "line": "I must be riid of them, if I am to find a way out and back to the real world.",
+      "end": true
+    }
+  ]
+}

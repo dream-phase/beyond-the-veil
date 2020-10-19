@@ -6,6 +6,8 @@ import wizard from "../assets/wizard.png";
 import wizardJson from "../assets/wizard.json";
 import dialoguebox from "../assets/dialoguebox.png";
 import PhaserMatterCollisionPlugin from "phaser-matter-collision-plugin";
+import Dialogue from "../dialogue";
+import tutorial from "../dialogues/tutorial.json";
 
 export default class LoadScene extends Phaser.Scene {
   constructor() {
@@ -24,9 +26,13 @@ export default class LoadScene extends Phaser.Scene {
     self.load.image("dialoguebox", dialoguebox);
   }
 
-  create() {}
-
-  update() {
-    this.scene.start("demo");
+  create() {
+    const self = this;
+    self.tutorial = new Dialogue(tutorial, this, () => {
+      self.scene.start("demo");
+    });
+    self.tutorial.startDialogue();
   }
+
+  update() {}
 }

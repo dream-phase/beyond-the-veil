@@ -10,7 +10,6 @@ import demoDialogue from "../dialogues/demoDialogue.json";
 import sky from "../assets/sky2.png";
 import ts from "../assets/tiles/tiles_spritesheet.png";
 import mt from "../assets/map_tiled.json";
-import door from "../assets/door.png";
 import heroine from "../assets/heroine01.png";
 import doorpng from "../assets/door.png";
 import Player from "../player.js";
@@ -104,14 +103,17 @@ export default class DemoScene extends Phaser.Scene {
     // this.npc.body.setGravityY(300);
     // this.physics.add.collider(this.npc, platforms);
 
-    //var door = this.add.image(100,100,)
+    var door = this.add.image(100, 100);
 
     this.player = new Player(this, 600, 300);
-    this.unsubscribePlayerCollide = this.matterCollision.addOnCollideStart({
-      objectA: this.player.sprite,
-      callback: this.onPlayerCollide,
-      context: this,
-    });
+    const self = this;
+    setTimeout(() => {
+      self.unsubscribePlayerCollide = self.matterCollision.addOnCollideStart({
+        objectA: this.player.sprite,
+        callback: this.onPlayerCollide,
+        context: this,
+      });
+    }, 400);
 
     //this.npc = this.matter.add.sprite(700,200,"heroine");
     //this.npc.setScale(1.5);

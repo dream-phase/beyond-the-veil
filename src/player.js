@@ -65,7 +65,7 @@ export default class sprite {
     const { width: w, height: h } = this.sprite;
     //creates main body sensor with rounded edges (chamfer) for better collisions
     //offsets by 32 32 to account for center of mass
-    const mainBody = Bodies.rectangle(32, 32, w * 0.6, h * 0.5, {
+    const mainBody = Bodies.rectangle(32, 32, w * 0.6, h * 0.5 - 6, {
       chamfer: { radius: 20 },
     });
     //creating bottom sensor, l and r to determine if the sprite is colliding with the ground or wall
@@ -73,10 +73,10 @@ export default class sprite {
       bottom: Bodies.rectangle(32, h * 0.5 - 12, w * 0.25, 2, {
         isSensor: true,
       }),
-      left: Bodies.rectangle(-w * 0.35 + 32, 32, 2, h * 0.5 - 12, {
+      left: Bodies.rectangle(-w * 0.35 + 32, 32, 2, h * 0.25 - 12, {
         isSensor: true,
       }),
-      right: Bodies.rectangle(w * 0.35 + 32, 32, 2, h * 0.5 - 12, {
+      right: Bodies.rectangle(w * 0.35 + 32, 32, 2, h * 0.25 - 12, {
         isSensor: true,
       }),
     };
@@ -116,7 +116,6 @@ export default class sprite {
     this.jumpInput = new multiKey(scene, [UP, W]);
     this.sprintInput = new multiKey(scene, [SHIFT]);
     this.enterInput = new multiKey(scene, [ENTER]);
-
     this.scene.events.on("update", this.update, this);
 
     //sensor tracking implementation
@@ -125,22 +124,27 @@ export default class sprite {
     this.sprite.canJump = true;
     scene.matter.world.on("beforeupdate", this.resetTouching, this);
 
-    scene.matterCollision.addOnCollideStart({
-      objectA: [this.sensors.bottom, this.sensors.left, this.sensors.right],
-      callback: this.onSensorCollide,
-      context: this,
-    });
-    scene.matterCollision.addOnCollideActive({
-      objectA: [this.sensors.bottom, this.sensors.left, this.sensors.right],
-      callback: this.onSensorCollide,
-      context: this,
-    });
+    setTimeout(() => {
+      scene.matterCollision.addOnCollideStart({
+        objectA: [this.sensors.bottom, this.sensors.left, this.sensors.right],
+        callback: this.onSensorCollide,
+        context: this,
+      });
+
+      scene.matterCollision.addOnCollideActive({
+        objectA: [this.sensors.bottom, this.sensors.left, this.sensors.right],
+        callback: this.onSensorCollide,
+        context: this,
+      });
+    }, 300);
+    this.hasAttacked = false;
   }
 
   update() {
     //console.log('x=',this.sprite.x,'y=',this.sprite.y);
     this.movePlayerManager();
   }
+
   onSensorCollide({ bodyA, bodyB, pair }) {
     // Collision method which watches if the player collides with objects/platforms
     // On the left, right, or below.
@@ -170,47 +174,61 @@ export default class sprite {
     const isLeftKeyDown = this.leftInput.isDown();
     const isJumpKeyDown = this.jumpInput.isDown();
     const isSprintKeyDown = this.sprintInput.isDown();
+    const pointer = this.scene.input.activePointer;
 
-    if (this.inDialogue) {
+    if (this.scene.inDialogue) {
       sprite.setVelocityX(0);
       sprite.setFrame("Idle/Idle-0.png");
       return;
     }
-    if (isLeftKeyDown) {
-      if (isSprintKeyDown) {
-        sprite.setVelocityX(-15);
-        if (this.isTouching.ground) {
-          sprite.play("Run", true);
+    if (pointer.isDown && !this.hasAttacked) {
+      console.log("attack");
+      sprite.play("Attack1", true);
+      this.hasAttacked = true;
+      const self = this;
+      setTimeout(() => {
+        self.hasAttacked = false;
+      }, 1000);
+      return;
+    } else if (!this.hasAttacked) {
+      if (isJumpKeyDown && isOnGround) {
+        sprite.setVelocityY(-15);
+        sprite.play("Jump", true);
+      }
+      if (isLeftKeyDown) {
+        if (isSprintKeyDown) {
+          sprite.setVelocityX(-15);
+          if (isOnGround) {
+            sprite.play("Run", true);
+          }
+        } else {
+          sprite.setVelocityX(-7);
+          if (isOnGround) {
+            sprite.play("Run", true);
+          }
+        }
+        sprite.flipX = true;
+      } else if (isRightKeyDown) {
+        if (isSprintKeyDown) {
+          sprite.setVelocityX(7);
+          if (this.isTouching.ground) {
+            sprite.play("Run", true);
+          }
+          sprite.flipX = false;
+        } else {
+          sprite.setVelocityX(7);
+          if (this.isTouching.ground) {
+            sprite.play("Run", true);
+          }
+          sprite.flipX = false;
         }
       } else {
-        sprite.setVelocityX(-7);
-        if (this.isTouching.ground) {
-          sprite.play("Run", true);
-        }
+        sprite.setVelocityX(0);
+        sprite.setFrame("Idle/Idle-0.png");
       }
-
-      sprite.flipX = true;
-    } else if (isRightKeyDown) {
-      if (isSprintKeyDown) {
-        sprite.setVelocityX(7);
-        if (this.isTouching.ground) {
-          sprite.play("Run", true);
-        }
-        sprite.flipX = false;
-      } else {
-        sprite.setVelocityX(7);
-        if (this.isTouching.ground) {
-          sprite.play("Run", true);
-        }
-        sprite.flipX = false;
+      if (!isOnGround) {
+        sprite.play("Jump", true);
       }
-    } else {
-      sprite.setVelocityX(0);
-      sprite.setFrame("Idle/Idle-0.png");
-    }
-    if (isJumpKeyDown && this.isTouching.ground) {
-      sprite.setVelocityY(-15);
-      sprite.play("Jump", true);
     }
   }
 }

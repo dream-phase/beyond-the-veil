@@ -9,7 +9,6 @@
  * @param {number} scrollFactor
  */
 
-
 import Phaser from "phaser";
 import sky from "../assets/sky2.png";
 import ts from "../assets/tiles/tiles_spritesheet.png";
@@ -36,19 +35,19 @@ import sky10 from "../assets/10_Sky.png";
 
 // Allows us to create scrollable parallax backgrounds through calling a method
 const createAligned = (scene, totalWidth, texture, scrollFactor) => {
-  const w = scene.textures.get(texture).getSourceImage().width
-  const count = Math.ceil(totalWidth / w) * scrollFactor
+  const w = scene.textures.get(texture).getSourceImage().width;
+  const count = Math.ceil(totalWidth / w) * scrollFactor;
 
-  let x = 0
-  for (let i = 0; i < count; ++i)
-  {
-    const m = scene.add.image(x, scene.scale.height+200, texture)
+  let x = 0;
+  for (let i = 0; i < count; ++i) {
+    const m = scene.add
+      .image(x, scene.scale.height + 200, texture)
       .setOrigin(0, 1)
-      .setScrollFactor(scrollFactor)
+      .setScrollFactor(scrollFactor);
 
-    x += m.width
+    x += m.width;
   }
-}
+};
 
 export default class lvl2 extends Phaser.Scene {
   constructor() {
@@ -171,9 +170,6 @@ export default class lvl2 extends Phaser.Scene {
     this.scene.start("lvl3");
   }
 
-
-
-
   onPlayerCollide({ gameObjectB }) {
     if (!gameObjectB || !(gameObjectB instanceof Phaser.Tilemaps.Tile)) return;
     var tile = gameObjectB;
@@ -198,7 +194,7 @@ export default class lvl2 extends Phaser.Scene {
     const isEnterKeyDown = this.enterInput.isDown();
     if (!this.player.destroyed) {
       // Added 70 offset of Y to show more of the background and less of the ground
-      this.cameras.main.startFollow(this.player.sprite,false,1,1,0,70);
+      this.cameras.main.startFollow(this.player.sprite, false, 1, 1, 0, 70);
     }
     if (pointer.isDown && !this.inDialogue) {
       const self = this;
@@ -208,7 +204,7 @@ export default class lvl2 extends Phaser.Scene {
 
       const isiKeyDown = this.iInput.isDown();
       if (!this.player.destroyed) {
-        this.cameras.main.startFollow(this.player.sprite,false,1,1,0,70);
+        this.cameras.main.startFollow(this.player.sprite, false, 1, 1, 0, 70);
       }
     }
     if (isEnterKeyDown) {

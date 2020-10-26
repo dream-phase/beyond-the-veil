@@ -16,7 +16,7 @@ function destroyGame() {
   game = null;
 }
 
-if (module.hot) {
+if (module && module.hot) {
   module.hot.dispose(destroyGame);
   module.hot.accept(newGame);
 }

@@ -4,7 +4,7 @@ import LoadScene from "./scenes/load";
 import DemoScene from "./scenes/demo";
 import Level2 from "./scenes/lvl2";
 import { Engine, Render, World, Bodies, Body } from "matter-js";
-import PhaserMatterCollisionPlugin from "phaser-matter-collision-plugin/src";
+import PhaserMatterCollisionPlugin from "phaser-matter-collision-plugin";
 
 export default {
   type: Phaser.AUTO,

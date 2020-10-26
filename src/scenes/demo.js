@@ -11,7 +11,6 @@ import sky from "../assets/sky2.png";
 import ts from "../assets/tiles/tiles_spritesheet.png";
 import mt from "../assets/map_tiled.json";
 import heroine from "../assets/heroine01.png";
-import doorpng from "../assets/door.png";
 import Player from "../player.js";
 import PhaserMatterCollisionPlugin from "phaser-matter-collision-plugin";
 import multiKey from "../multiKey.js";
@@ -39,10 +38,6 @@ export default class DemoScene extends Phaser.Scene {
     this.load.onFileComplete.add(fileComplete, this);
     this.load.onLoadComplete.add(loadComplete, this);*/
     this.load.image("tilessheet", ts);
-    this.load.image("sky", sky);
-    this.load.image("door", doorpng);
-    this.load.image("heroine", heroine);
-    this.load.image("inventory", inventory);
 
     //Loading exported TiledMap created in Tiled
     this.load.tilemapTiledJSON("map", mt);
@@ -110,7 +105,7 @@ export default class DemoScene extends Phaser.Scene {
     // this.npc.body.setGravityY(300);
     // this.physics.add.collider(this.npc, platforms);
 
-    var door = this.add.image(100, 100, "doorpng");
+    // var door = this.add.sprite(1000, 300, "door");
 
     //this.npc = this.matter.add.sprite(700,200,"heroine");
     //this.npc.setScale(1.5);
@@ -119,8 +114,8 @@ export default class DemoScene extends Phaser.Scene {
 
     //adding door, will make into functioning object later
 
-    var doorGroup = this.add.group();
-    maps.createFromObjects("doors", "door", doorpng);
+    // var doorGroup = this.add.group();
+    // maps.createFromObjects("doors", "door", doorpng);
     //const door = maps.findObject("Objects", obj => obj.name === "doors");
     //doors = this.matter.add.sprite(door.x, door.y, "actualDoor", null);
     //this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);

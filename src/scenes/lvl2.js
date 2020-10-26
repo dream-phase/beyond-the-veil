@@ -80,8 +80,8 @@ export default class lvl2 extends Phaser.Scene {
       callback: this.onPlayerCollide,
       context: this,
     });
-    const gargoyle = this.matter.add.sprite(600, 660, "gargoyle");
-    gargoyle.setScale(-3, 3);
+    this.gargoyle = this.matter.add.sprite(600, 660, "gargoyle");
+    this.gargoyle.setScale(-3, 3);
     const dialogue = new Dialogue(demoDialogue, this);
     setTimeout(() => {
       dialogue.startDialogue();
@@ -109,8 +109,16 @@ export default class lvl2 extends Phaser.Scene {
     }
   }
   update() {
+    const pointer = this.input.activePointer;
     if (!this.player.destroyed) {
       this.cameras.main.startFollow(this.player.sprite);
+    }
+
+    if (pointer.isDown && !this.inDialogue) {
+      const self = this;
+      setTimeout(() => {
+        self.gargoyle.destroy();
+      }, 800);
     }
   }
 }

@@ -1,37 +1,6 @@
 /*jshint esversion: 6 */
 //Note: art assets were obtained from opengameart.org; all assets are licensed under CC-BY 3.0
 
-//Commit 1: 27 Sep 2020: Initial build of demo
-
-// Set up parameters for scrolling bg
-
-/**
- *
- * @param {Phaser.Scene} scene
- * @param {number} totalWidth
- * @param {string} texture
- * @param {number} scrollFactor
- */
-
-// Global method for scrolling background
-
-const createAligned = (scene, totalWidth, texture, scrollFactor) => {
-  // Get width of texture to determine how many to repeat
-  const w = scene.textures.get(texture).getSourceImage().width;
-  const count = Math.ceil(totalWidth / w) * scrollFactor;
-
-  let x = 0;
-  // Actual repeat method
-  for (let i = 0; i < count; ++i)
-  {
-    const m = scene.add.image(x, scene.scale.height, texture)
-      .setOrigin(0, 1)
-      .setScrollFactor(scrollFactor);
-
-    x += m.width;
-  }
-};
-
 import Phaser from "phaser";
 import playersprite from "../assets/player-0.png";
 import playerjson from "../assets/player.json";
@@ -40,6 +9,7 @@ import ts from "../assets/tiles/tiles_spritesheet.png";
 import lvl2map from "../assets/lvl2.json";
 import doorpng from "../assets/door.png";
 import heroine from "../assets/heroine01.png";
+import lvl3 from "./lvl3.js";
 
 // Parallax assets
 import mist01 from "../assets/01_Mist.png";
@@ -84,9 +54,9 @@ export default class lvl2 extends Phaser.Scene {
     //Loading exported TiledMap created in Tiled
     this.load.tilemapTiledJSON("map2", lvl2map);
 
-    const { ENTER, LEFT, RIGHT, UP, SHIFT, A, D, W } = Phaser.Input.Keyboard.KeyCodes;
+    const { ENTER, LEFT, RIGHT, UP, SHIFT, A, D, W, I } = Phaser.Input.Keyboard.KeyCodes;
     this.enterInput = new multiKey(this, [ENTER]);
-  }
+    this.iInput = new multiKey(this, [I]);  }
 
   create() {
     //set up constants for canvas width and height
@@ -97,6 +67,7 @@ export default class lvl2 extends Phaser.Scene {
     console.log(height);
 
     // Setting parallax background
+    // This portion is bugged in terms of the Y axis, maybe setScale?
     this.add.image(width * 0.5, height * 0.5, "sky10")
       .setScrollFactor(0);
     this.add.image(0, height+200, "forest09")
@@ -127,31 +98,16 @@ export default class lvl2 extends Phaser.Scene {
       .setOrigin(0, 1)
       .setScrollFactor(0.7);
 
-
-    createAligned(this, totalWidth, "newsky", 0.1);
-    createAligned(this, totalWidth, "trees", 0.25);
-    createAligned(this, totalWidth, "stars", 0.2);
-
-
     var castlemaps = this.make.tilemap({ key:"map2" });
     var tileset = castlemaps.addTilesetImage("btv", "tilessheet");
-    //var backgroundImage = this.add.image(0, 0, "sky").setOrigin(0,0);
     var bg = castlemaps.createStaticLayer("castlebkobj", tileset, 0, 0);
-    //create platforms and set tile collision
     var castlebounds = castlemaps.createStaticLayer("castlebounds", tileset, 0, 0);
     var castleplatforms = castlemaps.createStaticLayer("castleplatforms", tileset, 0, 0);
-    //enables collision for all indices using -1
     castlebounds.setCollisionByProperty({ collides: true });
     castleplatforms.setCollisionByProperty({ collides: true });
     this.matter.world.convertTilemapLayer(castleplatforms);
     this.matter.world.convertTilemapLayer(castlebounds);
-
-
-
-    //var door = this.add.image(100,100,)
-
-
-
+    // Add player to scene and set camera bounds
     this.player = new Player(this, 600, 650);
     this.cameras.main.setBounds(0, 0, castlemaps.widthInPixels, castlemaps.heightInPixels);
     this.unsubscribePlayerCollide = this.matterCollision.addOnCollideStart({
@@ -162,6 +118,8 @@ export default class lvl2 extends Phaser.Scene {
   }
 
   onNextScene(){
+    this.player.freeze();
+    this.scene.start("lvl3");
   }
 
 
@@ -185,10 +143,13 @@ export default class lvl2 extends Phaser.Scene {
     }
   }
   update() {
+    const isEnterKeyDown = this.enterInput.isDown();
+    const isiKeyDown = this.iInput.isDown();
     if(!this.player.destroyed){
       this.cameras.main.startFollow(this.player.sprite);
     }
-
-
+    if(isEnterKeyDown){
+      this.onNextScene();
+    }
   }
 }

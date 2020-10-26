@@ -44,6 +44,7 @@ import ts from "../assets/tiles/tiles_spritesheet.png";
 import lvl2map from "../assets/lvl2.json";
 import doorpng from "../assets/door.png";
 import heroine from "../assets/heroine01.png";
+import lvl3 from "./lvl3.js";
 
 // Parallax assets
 import mist01 from "../assets/01_Mist.png";
@@ -128,6 +129,7 @@ export default class lvl2 extends Phaser.Scene {
       W,
     } = Phaser.Input.Keyboard.KeyCodes;
     this.enterInput = new multiKey(this, [ENTER]);
+    this.iInput = new multiKey(this, [I]);
   }
 
   create() {
@@ -199,7 +201,6 @@ export default class lvl2 extends Phaser.Scene {
 
     var castlemaps = this.make.tilemap({ key: "map2" });
     var tileset = castlemaps.addTilesetImage("btv", "tilessheet");
-    //var backgroundImage = this.add.image(0, 0, "sky").setOrigin(0,0);
     var bg = castlemaps.createStaticLayer("castlebkobj", tileset, 0, 0);
     var castlebounds = castlemaps.createStaticLayer(
       "castlebounds",

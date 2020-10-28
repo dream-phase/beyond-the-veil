@@ -27,6 +27,10 @@
     "phaser-matter-collision-plugin": "^0.10.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.3"
+    "@babel/core": "^7.12.3",
+    "matter-js": "^0.14.2",
+    "parcel": "^1.12.4",
+    "phaser": "^3.24.1",
+    "phaser-matter-collision-plugin": "^0.10.2"
   }
 }

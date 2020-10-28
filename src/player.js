@@ -5,8 +5,8 @@
 
 import Phaser from "phaser";
 import multiKey from "./multiKey.js";
-import PhaserMatterCollisionPlugin from "phaser-matter-collision-plugin";
 import Inventory from "./inventory";
+import PhaserMatterCollisionPlugin from "phaser-matter-collision-plugin";
 
 export default class Player {
   constructor(scene, x, y) {
@@ -147,6 +147,15 @@ export default class Player {
     //console.log('x=',this.sprite.x,'y=',this.sprite.y);
     this.movePlayerManager();
     this.inventory.update();
+  }
+
+  onSensorCollide({ bodyA, bodyB, pair }) {
+    // Collision method which watches if the player collides with objects/platforms
+    // On the left, right, or below.
+    // pair.separation is how much overlap there is in px
+    if (this.destroyed) return;
+    //console.log('x=',this.sprite.x,'y=',this.sprite.y);
+    this.movePlayerManager();
   }
 
   onSensorCollide({ bodyA, bodyB, pair }) {

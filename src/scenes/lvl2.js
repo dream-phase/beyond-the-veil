@@ -1,8 +1,6 @@
 /*jshint esversion: 6 */
 //Note: art assets were obtained from opengameart.org; all assets are licensed under CC-BY 3.0
 
-//Commit 1: 27 Sep 2020: Initial build of demo
-
 import Phaser from "phaser";
 import sky from "../assets/sky2.png";
 import ts from "../assets/tiles/tiles_spritesheet.png";
@@ -14,6 +12,18 @@ import PhaserMatterCollisionPlugin from "phaser-matter-collision-plugin";
 import multiKey from "../multiKey.js";
 import Dialogue from "../dialogue";
 import demoDialogue from "../dialogues/demoDialogue.json";
+import lvl3 from "./lvl3.js";
+// Parallax assets
+import mist01 from "../assets/01_Mist.png";
+import bushes02 from "../assets/02_Bushes.png";
+import particles03 from "../assets/03_Particles.png";
+import forest04 from "../assets/04_Forest.png";
+import particles05 from "../assets/05_Particles.png";
+import forest06 from "../assets/06_Forest.png";
+import forest07 from "../assets/07_Forest.png";
+import forest08 from "../assets/08_Forest.png";
+import forest09 from "../assets/09_Forest.png";
+import sky10 from "../assets/10_Sky.png";
 
 export default class lvl2 extends Phaser.Scene {
   constructor() {
@@ -26,6 +36,17 @@ export default class lvl2 extends Phaser.Scene {
     this.load.image("sky", sky);
     this.load.image("door", doorpng);
     this.load.image("heroine", heroine);
+    // Parallax assets
+    this.load.image("mist01", mist01);
+    this.load.image("bushes02", bushes02);
+    this.load.image("particles03", particles03);
+    this.load.image("forest04", forest04);
+    this.load.image("particles05", particles05);
+    this.load.image("forest06", forest06);
+    this.load.image("forest07", forest07);
+    this.load.image("forest08", forest08);
+    this.load.image("forest09", forest09);
+    this.load.image("sky10", sky10);
 
     //Loading exported TiledMap created in Tiled
     this.load.tilemapTiledJSON("map2", lvl2map);
@@ -45,13 +66,71 @@ export default class lvl2 extends Phaser.Scene {
 
   create() {
     console.log("creating");
+    //enables collision for all indices using -1
+    const {
+      ENTER,
+      LEFT,
+      RIGHT,
+      UP,
+      SHIFT,
+      A,
+      D,
+      W,
+      I,
+    } = Phaser.Input.Keyboard.KeyCodes;
+    this.enterInput = new multiKey(this, [ENTER]);
+    this.iInput = new multiKey(this, [I]);
+
+    //set up constants for canvas width and height
+    const width = this.scale.width;
+    const height = this.scale.height;
+    const totalWidth = width * 10;
+    console.log(width);
+    console.log(height);
+
+    // Setting parallax background
+    // This portion is bugged in terms of the Y axis, maybe setScale?
+    this.add.image(width * 0.5, height * 0.5, "sky10").setScrollFactor(0);
+    this.add
+      .image(0, height + 200, "forest09")
+      .setOrigin(0, 1)
+      .setScrollFactor(0.3);
+    this.add
+      .image(0, height + 200, "forest08")
+      .setOrigin(0, 1)
+      .setScrollFactor(0.35);
+    this.add
+      .image(0, height + 200, "forest07")
+      .setOrigin(0, 1)
+      .setScrollFactor(0.4);
+    this.add
+      .image(0, height + 200, "forest06")
+      .setOrigin(0, 1)
+      .setScrollFactor(0.45);
+    this.add
+      .image(0, height + 200, "particles05")
+      .setOrigin(0, 1)
+      .setScrollFactor(0.5);
+    this.add
+      .image(0, height + 200, "forest04")
+      .setOrigin(0, 1)
+      .setScrollFactor(0.55);
+    this.add
+      .image(0, height + 200, "particles03")
+      .setOrigin(0, 1)
+      .setScrollFactor(0.6);
+    this.add
+      .image(0, height + 200, "bushes02")
+      .setOrigin(0, 1)
+      .setScrollFactor(0.65);
+    this.add
+      .image(0, height + 200, "mist01")
+      .setOrigin(0, 1)
+      .setScrollFactor(0.7);
 
     var castlemaps = this.make.tilemap({ key: "map2" });
     var tileset = castlemaps.addTilesetImage("btv", "tilessheet");
-    var backgroundImage = this.add.image(0, 0, "sky").setOrigin(0, 0);
-    backgroundImage.setScrollFactor(0);
     var bg = castlemaps.createStaticLayer("castlebkobj", tileset, 0, 0);
-    //create platforms and set tile collision
     var castlebounds = castlemaps.createStaticLayer(
       "castlebounds",
       tileset,
@@ -64,7 +143,6 @@ export default class lvl2 extends Phaser.Scene {
       0,
       0
     );
-    //enables collision for all indices using -1
     castlebounds.setCollisionByProperty({ collides: true });
     castleplatforms.setCollisionByProperty({ collides: true });
     this.matter.world.convertTilemapLayer(castleplatforms);
@@ -88,7 +166,10 @@ export default class lvl2 extends Phaser.Scene {
     }, 150);
   }
 
-  onNextScene() {}
+  onNextScene() {
+    this.player.freeze();
+    this.scene.start("lvl3");
+  }
 
   onPlayerCollide({ gameObjectB }) {
     if (!gameObjectB || !(gameObjectB instanceof Phaser.Tilemaps.Tile)) return;
@@ -108,17 +189,27 @@ export default class lvl2 extends Phaser.Scene {
       cam.once("camerafadeoutcomplete", () => this.scene.restart());
     }
   }
+
   update() {
     const pointer = this.input.activePointer;
+    const isEnterKeyDown = this.enterInput.isDown();
     if (!this.player.destroyed) {
       this.cameras.main.startFollow(this.player.sprite);
     }
-
     if (pointer.isDown && !this.inDialogue) {
       const self = this;
       setTimeout(() => {
         self.gargoyle.destroy();
       }, 800);
+
+      const isiKeyDown = this.iInput.isDown();
+      if (!this.player.destroyed) {
+        this.cameras.main.startFollow(this.player.sprite);
+      }
+    }
+    if (isEnterKeyDown) {
+      console.log("go to next level");
+      this.onNextScene();
     }
   }
 }

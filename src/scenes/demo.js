@@ -19,6 +19,7 @@ import keyDialogue from "../dialogues/key.json";
 import doorDialogue from "../dialogues/doorDialogue.json";
 import inventory from "../assets/inventory.png";
 import lvl2 from "./lvl2.js";
+import doorpng from "../assets/door.png";
 
 export default class DemoScene extends Phaser.Scene {
   constructor() {
@@ -41,6 +42,15 @@ export default class DemoScene extends Phaser.Scene {
 
     //Loading exported TiledMap created in Tiled
     this.load.tilemapTiledJSON("map", mt);
+    this.load.image("tilessheet", ts);
+    this.load.image("sky", sky);
+    this.load.image("door", doorpng);
+    this.load.image("heroine", heroine);
+    this.load.image("inventory", inventory);
+
+    //Loading exported TiledMap created in Tiled
+    this.load.tilemapTiledJSON("map", mt);
+
     const {
       ENTER,
       LEFT,
@@ -50,8 +60,10 @@ export default class DemoScene extends Phaser.Scene {
       A,
       D,
       W,
+      I,
     } = Phaser.Input.Keyboard.KeyCodes;
     this.enterInput = new multiKey(this, [ENTER]);
+    this.iInput = new multiKey(this, [I]);
   }
 
   create() {
@@ -91,7 +103,6 @@ export default class DemoScene extends Phaser.Scene {
     var water = maps.createStaticLayer("water", tileset, 0, 0);
     var windows = maps.createStaticLayer("windows", tileset, 0, 0);
     var supports = maps.createStaticLayer("supports", tileset, 0, 0);
-    var doorLayer = maps.getObjectLayer("doors");
     //var doorLayer = this.matter.add.sprite(1300, 440, "door").setScale(0.8);
     var doortile = maps.createStaticLayer("doortile", tileset, 0, 0);
     doortile.setCollisionByProperty({ collides: true });
@@ -99,14 +110,13 @@ export default class DemoScene extends Phaser.Scene {
     //this.matter.world.setBounds(0, 0, sky.widthInPixels-300, sky.heightInPixels-300, true, true, true, true);
 
     //var door = this.add.image(100,100,)
-
-    // this.npc = this.matter.add.sprite(700, 700, "heroine");
-    // this.npc.setScale(1.5);
-    // this.npc.body.setGravityY(300);
-    // this.physics.add.collider(this.npc, platforms);
-
-    // var door = this.add.sprite(1000, 300, "door");
-
+    /*this.matterCollision.addOnCollideStart({
+      objectA: this.player.sprite,
+      objectB: doorLayer.sprite,
+      callback: eventData => {
+        this.onNextScene();
+      }
+    });*/
     //this.npc = this.matter.add.sprite(700,200,"heroine");
     //this.npc.setScale(1.5);
     //this.npc.setCollideWorldBounds(true);
@@ -167,7 +177,14 @@ export default class DemoScene extends Phaser.Scene {
     setTimeout(() => {
       self.startDialogueObj.startDialogue();
     }, 100);
+
+    var doorGroup = this.add.group();
+    //maps.createFromObjects('doors','door',doorpng);
+    //const door = maps.findObject("Objects", obj => obj.name === "doors");
+    //doors = this.matter.add.sprite(door.x, door.y, "actualDoor", null);
+    this.cameras.main.setBounds(0, 0, maps.widthInPixels, maps.heightInPixels);
   }
+
   onPlayerCollide({ gameObjectB }) {
     if (!gameObjectB || !(gameObjectB instanceof Phaser.Tilemaps.Tile)) return;
     //console.log("You hit something!",console.log(gameObjectB.properties));

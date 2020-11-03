@@ -30,7 +30,7 @@ export default class lvl3 extends Phaser.Scene {
   }
 
   create() {
-
+    this.playerScore = 0;
     this.add.image(0, 0, "sky");
     // No walls so balls will fly infinitely
     this.matter.world.setBounds(0,0,944,544,70,false,false,false,false);
@@ -62,53 +62,10 @@ export default class lvl3 extends Phaser.Scene {
     this.wallGreen.setVelocityX(6);
     this.wallBlue.setVelocityX(3);
 
-    blue.setCircle();
-    blue.setBounce(0.8);
-    blue.setFriction(0.05);
-    blue2.setCircle();
-    blue2.setBounce(0.8);
-    blue2.setFriction(0.05);
-    blue3.setCircle();
-    blue3.setBounce(0.8);
-    blue3.setFriction(0.05);
-    blue4.setCircle();
-    blue4.setBounce(0.8);
-    blue4.setFriction(0.05);
-    blue5.setCircle();
-    blue5.setBounce(0.8);
-    blue5.setFriction(0.05);
-
-    red.setCircle();
-    red.setBounce(0.8);
-    red.setFriction(0.05);
-    red2.setCircle();
-    red2.setBounce(0.8);
-    red2.setFriction(0.05);
-    red3.setCircle();
-    red3.setBounce(0.8);
-    red3.setFriction(0.05);
     this.red4.setCircle();
     this.red4.setBounce(0.8);
     this.red4.setFriction(0.05);
-    red5.setCircle();
-    red5.setBounce(0.8);
-    red5.setFriction(0.05);
 
-    green.setCircle();
-    green.setBounce(0.8);
-    green.setFriction(0.05);
-    green2.setCircle();
-    green2.setBounce(0.8);
-    green2.setFriction(0.05);
-    green3.setCircle();
-    green3.setBounce(0.8);
-    green3.setFriction(0.05);
-    green4.setCircle();
-    green4.setBounce(0.8);
-    green4.setFriction(0.05);
-    green5.setCircle();
-    green5.setBounce(0.8);
-    green5.setFriction(0.05);
     // Mouse control
     this.matter.add.mouseSpring({ length: 1, stiffness: 0.6 });
     // Collisions
@@ -150,42 +107,30 @@ export default class lvl3 extends Phaser.Scene {
     // Adding the constraint to the matter-js world
     this.matter.world.add(this.secondConstraint);
 
-
+    // Add score text
+    this.scoreText = this.add.text(0, 550, this.playerScore+"/12 Orbs", { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif', fontSize: '22px' });
 
     // Collision detection using PhaserMatterCollisionPlugin
-    console.log(this.matterCollision);
+    // Will only detect our first orb, other collision detection will be in the update method
     this.matterCollision.addOnCollideStart({
-      //objectA: this.red4,
-      objectA: this.wallRed,
+      objectA: this.red4,
+      objectB: this.wallRed,
       callback: eventData => {
+        // these constants are passed from the event to our callback method
+        // bodies are the actual matter bodies and gameobjects are part of phaser
         const { bodyA, bodyB, gameObjectA, gameObjectB, pair } = eventData;
-        //gameObjectA.destroy();
-        console.log(bodyB, gameObjectA,gameObjectB)
-      }//() => console.log("Player touched door!")
+        gameObjectA.setVisible(false)
+        this.playerScore++
+        this.scoreText.setText(this.playerScore+"/12 Orbs")
+      }
     });
 
-    /*this.matterCollision.addOnCollideStart({
-      objectA: this.wallRed,
-      objectB: this.red4,
-      callback: eventData => console.log("Player touched door!")
-    });*/
-
-    /*this.matter.world.on("collisionstart", (event, bodyA, bodyB) =>{
-      console.log(bodyA.label, bodyB.label);
-      if(bodyA.label == "brickWallRed" && bodyB.label == "redOrb"){
-
-        bodyB.gameObject.destroy();
-      }
-      if(bodyA.label == "redOrb" && bodyB.label == "brickWallRed"){
-        bodyA.gameObject.destroy();
-      }
-    });*/
 
 
   }
 
   onNextScene(){
-
+    // I will add code here to transition to next scene when I finish it up
   }
 
 
@@ -197,26 +142,35 @@ export default class lvl3 extends Phaser.Scene {
       // Above logic will prevent a launching ball from colliding with one that just spawned.
       // If position of old orb is lower than 330 (technically higher not lower since Phaser sets the origin at the top left (0,0))
       if (!this.pointer.isDown && this.red4.body.position.y < 330) {
+        // Random array of orb colors
+        const orbs = ["redOrb","greenOrb","blueOrb"];
+        // Random array of walls
+        const walls = [this.wallRed,this.wallGreen,this.wallBlue];
+        // Random number based on length of array
+        const randomOrb = Math.floor(Math.random() * orbs.length);
+
         // Add new orb & set its attributes
-        this.red4 = this.matter.add.image(500, 350, "redOrb", null, {label: "redOrb"});
+        this.red4 = this.matter.add.image(500, 350, orbs[randomOrb], null, {label: "redOrb"});
         this.red4.setCircle();
         this.red4.setBounce(0.8);
         this.red4.setFriction(0.05);
         // Update constraint to ball we just spawned
+        // We need a second matter collision method because we are creating a new orb on generation
+        this.matterCollision.addOnCollideStart({
+          objectA: this.red4,
+          objectB: walls[randomOrb],
+          callback: eventData => {
+            const { bodyA, bodyB, gameObjectA, gameObjectB, pair } = eventData;
+            gameObjectA.setVisible(false);
+            this.playerScore++
+            this.scoreText.setText(this.playerScore+"/12 Orbs")
+          }
+        });
         this.secondConstraint.bodyB = this.red4.body;
 
 
       }
-    //}
 
-    //const isEnterKeyDown = this.enterInput.isDown();
-    //const isiKeyDown = this.iInput.isDown();
-    //if(!this.player.destroyed){
-    //  this.cameras.main.startFollow(this.player.sprite);
-    //}
-    //if(isEnterKeyDown){
-    //  this.onNextScene();
-    //}
     // Back and forth motion for scoreboxes "walls"
     if(this.wallRed.body.position.x >= 900){
       this.wallRed.setVelocityX(-5);

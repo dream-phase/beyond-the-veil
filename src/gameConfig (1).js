@@ -3,9 +3,7 @@ import Phaser from "phaser";
 import LoadScene from "./scenes/load";
 import DemoScene from "./scenes/demo";
 import Level2 from "./scenes/lvl2";
-import Level3 from "./scenes/lvl3";
-import Level4 from "./scenes/lvl4";
-import { Engine, Render, World, Bodies, Body, Constraint, MouseConstraint, Events, Composites } from "matter-js";
+import { Engine, Render, World, Bodies, Body } from "matter-js";
 import PhaserMatterCollisionPlugin from "phaser-matter-collision-plugin";
 
 export default {
@@ -18,7 +16,7 @@ export default {
     text: "white",
     background: ["#FD7400", "#FFE11A", "#BEDB39", "#1F8A70", "#004358"],
   },
-  scene: [LoadScene, DemoScene, Level2, Level3],
+  scene: [LoadScene, DemoScene, Level2],
   physics: {
     //converted to Matter-js to allow for polygon collision boxes
     default: "matter",

@@ -188,25 +188,7 @@ export default class lvl3 extends Phaser.Scene {
     this.red4.setCircle();
     this.red4.setBounce(0.8);
     this.red4.setFriction(0.05);
-    red5.setCircle();
-    red5.setBounce(0.8);
-    red5.setFriction(0.05);
 
-    green.setCircle();
-    green.setBounce(0.8);
-    green.setFriction(0.05);
-    green2.setCircle();
-    green2.setBounce(0.8);
-    green2.setFriction(0.05);
-    green3.setCircle();
-    green3.setBounce(0.8);
-    green3.setFriction(0.05);
-    green4.setCircle();
-    green4.setBounce(0.8);
-    green4.setFriction(0.05);
-    green5.setCircle();
-    green5.setBounce(0.8);
-    green5.setFriction(0.05);
     // Mouse control
     this.matter.add.mouseSpring({ length: 1, stiffness: 0.6 });
     // Collisions
@@ -247,38 +229,6 @@ export default class lvl3 extends Phaser.Scene {
     // Adding the constraint to the matter-js world
     this.matter.world.add(this.secondConstraint);
 
-    // Collision detection using PhaserMatterCollisionPlugin
-    console.log(this.matterCollision);
-    this.matterCollision.addOnCollideStart({
-      //objectA: this.red4,
-      objectA: this.wallRed,
-      callback: (eventData) => {
-        const { bodyA, bodyB, gameObjectA, gameObjectB, pair } = eventData;
-        //gameObjectA.destroy();
-        console.log(bodyB, gameObjectA, gameObjectB);
-      }, //() => console.log("Player touched door!")
-    });
-
-    /*this.matterCollision.addOnCollideStart({
-      objectA: this.wallRed,
-      objectB: this.red4,
-      callback: eventData => console.log("Player touched door!")
-    });*/
-
-    /*this.matter.world.on("collisionstart", (event, bodyA, bodyB) =>{
-      console.log(bodyA.label, bodyB.label);
-      if(bodyA.label == "brickWallRed" && bodyB.label == "redOrb"){
-
-        bodyB.gameObject.destroy();
-      }
-      if(bodyA.label == "redOrb" && bodyB.label == "brickWallRed"){
-        bodyA.gameObject.destroy();
-      }
-    });*/
-
-    // Adding the constraint to the matter-js world
-    this.matter.world.add(this.secondConstraint);
-
     // Add score text
     this.scoreText = this.add.text(0, 550, this.playerScore + "/12 Orbs", {
       fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif',
@@ -299,6 +249,13 @@ export default class lvl3 extends Phaser.Scene {
         this.scoreText.setText(this.playerScore + "/12 Orbs");
       },
     });
+
+    // Adding the constraint to the matter-js world
+    this.matter.world.add(this.secondConstraint);
+  }
+
+  onNextScene() {
+    // I will add code here to transition to next scene when I finish it up
   }
 
   onNextScene() {

@@ -9,7 +9,7 @@ import blueOrb from "../assets/orb_blue.png";
 import greenOrb from "../assets/orb_green.png";
 import redOrb from "../assets/orb_red.png";
 import brickWall from "../assets/tiles/brickWall.png";
-//import lvl4 from "./lvl4.js";
+import lvl4 from "./lvl4.js";
 
 export default class lvl3 extends Phaser.Scene {
   constructor() {
@@ -93,6 +93,64 @@ export default class lvl3 extends Phaser.Scene {
       .setTint(0x0000ff)
       .setSensor(true);
 
+    this.add.image(0, 0, "sky");
+    // No walls so balls will fly infinitely
+    this.matter.world.setBounds(0, 0, 944, 544, 70, false, false, false, false);
+    var blue = this.matter.add.image(400, 300, "blueOrb");
+    var blue2 = this.matter.add.image(450, 300, "blueOrb");
+    var blue3 = this.matter.add.image(120, 300, "blueOrb");
+    var blue4 = this.matter.add.image(300, 300, "blueOrb");
+    var blue5 = this.matter.add.image(450, 300, "blueOrb");
+    var red = this.matter.add.image(220, 300, "redOrb");
+    var red2 = this.matter.add.image(440, 300, "redOrb");
+    var red3 = this.matter.add.image(100, 300, "redOrb");
+    this.red4 = this.matter.add.image(500, 350, "redOrb", null, {
+      label: "redOrb",
+    });
+    var red5 = this.matter.add.image(380, 300, "redOrb");
+    var green = this.matter.add.image(110, 300, "greenOrb");
+    var green2 = this.matter.add.image(220, 300, "greenOrb");
+    var green3 = this.matter.add.image(370, 300, "greenOrb");
+    var green4 = this.matter.add.image(420, 300, "greenOrb");
+    var green5 = this.matter.add.image(430, 300, "greenOrb");
+
+    // x, y, image, null, inertia: Infinity will ensure that block loses no velocity on bounce
+    // Don't want player to move scoreboxes "walls" so ignorePointer
+    // Sensor allows the blocks not to interact with the matter-js physics, but it will still detect collisions
+    this.wallRed = this.matter.add
+      .image(100, 100, "brickWall", null, {
+        label: "brickWallRed",
+        inertia: Infinity,
+        ignorePointer: true,
+      })
+      .setFriction(0, 0, 0)
+      .setBounce(1)
+      .setIgnoreGravity(true)
+      .setTint(0xff0000)
+      .setSensor(true);
+    this.wallGreen = this.matter.add
+      .image(100, 100, "brickWall", null, {
+        label: "brickWallGreen",
+        inertia: Infinity,
+        ignorePointer: true,
+      })
+      .setFriction(0, 0, 0)
+      .setBounce(1)
+      .setIgnoreGravity(true)
+      .setTint(0x00ff00)
+      .setSensor(true);
+    this.wallBlue = this.matter.add
+      .image(100, 100, "brickWall", null, {
+        label: "brickWallBlue",
+        inertia: Infinity,
+        ignorePointer: true,
+      })
+      .setFriction(0, 0, 0)
+      .setBounce(1)
+      .setIgnoreGravity(true)
+      .setTint(0x0000ff)
+      .setSensor(true);
+
     this.wallRed.setVelocityX(5);
     this.wallGreen.setVelocityX(6);
     this.wallBlue.setVelocityX(3);
@@ -127,9 +185,9 @@ export default class lvl3 extends Phaser.Scene {
     red3.setCircle();
     red3.setBounce(0.8);
     red3.setFriction(0.05);
-    red4.setCircle();
-    red4.setBounce(0.8);
-    red4.setFriction(0.05);
+    this.red4.setCircle();
+    this.red4.setBounce(0.8);
+    this.red4.setFriction(0.05);
     red5.setCircle();
     red5.setBounce(0.8);
     red5.setFriction(0.05);
@@ -149,7 +207,7 @@ export default class lvl3 extends Phaser.Scene {
     green5.setCircle();
     green5.setBounce(0.8);
     green5.setFriction(0.05);
-
+    // Mouse control
     this.matter.add.mouseSpring({ length: 1, stiffness: 0.6 });
     // Collisions
     var col1 = this.matter.world.nextCategory();
@@ -186,6 +244,37 @@ export default class lvl3 extends Phaser.Scene {
       length: 0,
       stiffness: 0.05,
     });
+    // Adding the constraint to the matter-js world
+    this.matter.world.add(this.secondConstraint);
+
+    // Collision detection using PhaserMatterCollisionPlugin
+    console.log(this.matterCollision);
+    this.matterCollision.addOnCollideStart({
+      //objectA: this.red4,
+      objectA: this.wallRed,
+      callback: (eventData) => {
+        const { bodyA, bodyB, gameObjectA, gameObjectB, pair } = eventData;
+        //gameObjectA.destroy();
+        console.log(bodyB, gameObjectA, gameObjectB);
+      }, //() => console.log("Player touched door!")
+    });
+
+    /*this.matterCollision.addOnCollideStart({
+      objectA: this.wallRed,
+      objectB: this.red4,
+      callback: eventData => console.log("Player touched door!")
+    });*/
+
+    /*this.matter.world.on("collisionstart", (event, bodyA, bodyB) =>{
+      console.log(bodyA.label, bodyB.label);
+      if(bodyA.label == "brickWallRed" && bodyB.label == "redOrb"){
+
+        bodyB.gameObject.destroy();
+      }
+      if(bodyA.label == "redOrb" && bodyB.label == "brickWallRed"){
+        bodyA.gameObject.destroy();
+      }
+    });*/
 
     // Adding the constraint to the matter-js world
     this.matter.world.add(this.secondConstraint);

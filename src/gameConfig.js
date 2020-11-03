@@ -4,6 +4,7 @@ import LoadScene from "./scenes/load";
 import DemoScene from "./scenes/demo";
 import Level2 from "./scenes/lvl2";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import Level3 from "./scenes/lvl3";
 =======
 import Level3 from "./scenes/lvl3"
@@ -12,6 +13,22 @@ import { Engine, Render, World, Bodies, Body } from "matter-js";
 import PhaserMatterCollisionPlugin from "phaser-matter-collision-plugin";
 import ThroneRoom from "./scenes/throneroom";
 import FadeToBlack from "./scenes/fadeToBlack";
+=======
+import Level3 from "./scenes/lvl3";
+import Level4 from "./scenes/lvl4";
+import {
+  Engine,
+  Render,
+  World,
+  Bodies,
+  Body,
+  Constraint,
+  MouseConstraint,
+  Events,
+  Composites,
+} from "matter-js";
+import PhaserMatterCollisionPlugin from "phaser-matter-collision-plugin";
+>>>>>>> Updated minigame
 
 export default {
   type: Phaser.AUTO,

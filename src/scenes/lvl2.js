@@ -1,6 +1,15 @@
 /*jshint esversion: 6 */
 //Note: art assets were obtained from opengameart.org; all assets are licensed under CC-BY 3.0
 
+/**
+ *
+ * @param {Phaser.Scene} scene
+ * @param {number} totalWidth
+ * @param {string} texture
+ * @param {number} scrollFactor
+ */
+
+
 import Phaser from "phaser";
 import sky from "../assets/sky2.png";
 import ts from "../assets/tiles/tiles_spritesheet.png";
@@ -24,6 +33,22 @@ import forest07 from "../assets/07_Forest.png";
 import forest08 from "../assets/08_Forest.png";
 import forest09 from "../assets/09_Forest.png";
 import sky10 from "../assets/10_Sky.png";
+
+
+const createAligned = (scene, totalWidth, texture, scrollFactor) => {
+  const w = scene.textures.get(texture).getSourceImage().width
+  const count = Math.ceil(totalWidth / w) * scrollFactor
+
+  let x = 0
+  for (let i = 0; i < count; ++i)
+  {
+    const m = scene.add.image(x, scene.scale.height+200, texture)
+      .setOrigin(0, 1)
+      .setScrollFactor(scrollFactor)
+
+    x += m.width
+  }
+}
 
 export default class lvl2 extends Phaser.Scene {
   constructor() {
@@ -83,7 +108,7 @@ export default class lvl2 extends Phaser.Scene {
 
     //set up constants for canvas width and height
     const width = this.scale.width;
-    const height = this.scale.height;
+    const height = this.scale.height + 200;
     const totalWidth = width * 10;
     console.log(width);
     console.log(height);
@@ -91,7 +116,17 @@ export default class lvl2 extends Phaser.Scene {
     // Setting parallax background
     // This portion is bugged in terms of the Y axis, maybe setScale?
     this.add.image(width * 0.5, height * 0.5, "sky10").setScrollFactor(0);
-    this.add
+
+    createAligned(this, totalWidth, "forest09", 0.3);
+    createAligned(this, totalWidth, "forest08", 0.35);
+    createAligned(this, totalWidth, "forest07", 0.4);
+    createAligned(this, totalWidth, "forest06", 0.45);
+    createAligned(this, totalWidth, "particles05", 0.5);
+    createAligned(this, totalWidth, "forest04", 0.55);
+    createAligned(this, totalWidth, "particles03", 0.6);
+    createAligned(this, totalWidth, "bushes02", 0.65);
+    createAligned(this, totalWidth, "mist01", 0.7);
+    /*this.add
       .image(0, height + 200, "forest09")
       .setOrigin(0, 1)
       .setScrollFactor(0.3);
@@ -126,7 +161,7 @@ export default class lvl2 extends Phaser.Scene {
     this.add
       .image(0, height + 200, "mist01")
       .setOrigin(0, 1)
-      .setScrollFactor(0.7);
+      .setScrollFactor(0.7);*/
 
     var castlemaps = this.make.tilemap({ key: "map2" });
     var tileset = castlemaps.addTilesetImage("btv", "tilessheet");
@@ -151,14 +186,14 @@ export default class lvl2 extends Phaser.Scene {
     //var door = this.add.image(100,100,)
 
     console.log("Creating player");
-    this.player = new Player(this, 200, 600);
+    this.player = new Player(this, 900, 600);
     console.log("Player created");
     this.unsubscribePlayerCollide = this.matterCollision.addOnCollideStart({
       objectA: this.player.sprite,
       callback: this.onPlayerCollide,
       context: this,
     });
-    this.gargoyle = this.matter.add.sprite(600, 660, "gargoyle");
+    this.gargoyle = this.matter.add.sprite(1400, 660, "gargoyle");
     this.gargoyle.setScale(-3, 3);
     const dialogue = new Dialogue(demoDialogue, this);
     setTimeout(() => {
@@ -170,6 +205,9 @@ export default class lvl2 extends Phaser.Scene {
     this.player.freeze();
     this.scene.start("lvl3");
   }
+
+
+
 
   onPlayerCollide({ gameObjectB }) {
     if (!gameObjectB || !(gameObjectB instanceof Phaser.Tilemaps.Tile)) return;
@@ -194,7 +232,7 @@ export default class lvl2 extends Phaser.Scene {
     const pointer = this.input.activePointer;
     const isEnterKeyDown = this.enterInput.isDown();
     if (!this.player.destroyed) {
-      this.cameras.main.startFollow(this.player.sprite);
+      this.cameras.main.startFollow(this.player.sprite,false,1,1,0,70);
     }
     if (pointer.isDown && !this.inDialogue) {
       const self = this;
@@ -204,7 +242,7 @@ export default class lvl2 extends Phaser.Scene {
 
       const isiKeyDown = this.iInput.isDown();
       if (!this.player.destroyed) {
-        this.cameras.main.startFollow(this.player.sprite);
+        this.cameras.main.startFollow(this.player.sprite,false,1,1,0,70);
       }
     }
     if (isEnterKeyDown) {

@@ -2,7 +2,7 @@
 //Note: art assets were obtained from opengameart.org; all assets are licensed under CC-BY 3.0
 
 /**
- *
+ * Setting up parameters for parralax 'createAligned' method
  * @param {Phaser.Scene} scene
  * @param {number} totalWidth
  * @param {string} texture
@@ -34,7 +34,7 @@ import forest08 from "../assets/08_Forest.png";
 import forest09 from "../assets/09_Forest.png";
 import sky10 from "../assets/10_Sky.png";
 
-
+// Allows us to create scrollable parallax backgrounds through calling a method
 const createAligned = (scene, totalWidth, texture, scrollFactor) => {
   const w = scene.textures.get(texture).getSourceImage().width
   const count = Math.ceil(totalWidth / w) * scrollFactor
@@ -117,6 +117,7 @@ export default class lvl2 extends Phaser.Scene {
     // This portion is bugged in terms of the Y axis, maybe setScale?
     this.add.image(width * 0.5, height * 0.5, "sky10").setScrollFactor(0);
 
+    // Use createAligned method defined above to allow scrolling
     createAligned(this, totalWidth, "forest09", 0.3);
     createAligned(this, totalWidth, "forest08", 0.35);
     createAligned(this, totalWidth, "forest07", 0.4);
@@ -126,42 +127,6 @@ export default class lvl2 extends Phaser.Scene {
     createAligned(this, totalWidth, "particles03", 0.6);
     createAligned(this, totalWidth, "bushes02", 0.65);
     createAligned(this, totalWidth, "mist01", 0.7);
-    /*this.add
-      .image(0, height + 200, "forest09")
-      .setOrigin(0, 1)
-      .setScrollFactor(0.3);
-    this.add
-      .image(0, height + 200, "forest08")
-      .setOrigin(0, 1)
-      .setScrollFactor(0.35);
-    this.add
-      .image(0, height + 200, "forest07")
-      .setOrigin(0, 1)
-      .setScrollFactor(0.4);
-    this.add
-      .image(0, height + 200, "forest06")
-      .setOrigin(0, 1)
-      .setScrollFactor(0.45);
-    this.add
-      .image(0, height + 200, "particles05")
-      .setOrigin(0, 1)
-      .setScrollFactor(0.5);
-    this.add
-      .image(0, height + 200, "forest04")
-      .setOrigin(0, 1)
-      .setScrollFactor(0.55);
-    this.add
-      .image(0, height + 200, "particles03")
-      .setOrigin(0, 1)
-      .setScrollFactor(0.6);
-    this.add
-      .image(0, height + 200, "bushes02")
-      .setOrigin(0, 1)
-      .setScrollFactor(0.65);
-    this.add
-      .image(0, height + 200, "mist01")
-      .setOrigin(0, 1)
-      .setScrollFactor(0.7);*/
 
     var castlemaps = this.make.tilemap({ key: "map2" });
     var tileset = castlemaps.addTilesetImage("btv", "tilessheet");
@@ -232,6 +197,7 @@ export default class lvl2 extends Phaser.Scene {
     const pointer = this.input.activePointer;
     const isEnterKeyDown = this.enterInput.isDown();
     if (!this.player.destroyed) {
+      // Added 70 offset of Y to show more of the background and less of the ground
       this.cameras.main.startFollow(this.player.sprite,false,1,1,0,70);
     }
     if (pointer.isDown && !this.inDialogue) {

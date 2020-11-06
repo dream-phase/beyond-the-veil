@@ -17,7 +17,7 @@ export default {
     text: "white",
     background: ["#FD7400", "#FFE11A", "#BEDB39", "#1F8A70", "#004358"],
   },
-  scene: [LoadScene, DemoScene, Level2, Level3],
+  scene: [LoadScene, DemoScene, Level2, Level3], //
   physics: {
     //converted to Matter-js to allow for polygon collision boxes
     default: "matter",

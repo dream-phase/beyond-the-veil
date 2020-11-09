@@ -12,7 +12,7 @@
 import Phaser from "phaser";
 import Player from "../player.js";
 import sky from "../assets/sky2.png";
-import ts from "../assets/tiles/tiles_spritesheet_extruded.png";
+import ts from "../assets/tiles/tiles_spritesheet.png";
 import lvl4map from "../assets/lvl4.json";
 import barrel from "../assets/barrel.png";
 import wooden from "../assets/tiles/bridgeLogs.png";
@@ -33,42 +33,49 @@ import time from "../assets/time.png";
 import tree from "../assets/tree.png";
 import human from "../assets/human.png";
 import school from "../assets/school.png";
-import puzzle2 from "../scenes/puzzle2.js"
+import puzzle2 from "../scenes/puzzle2.js";
+
+// Riddle puzzle assets
+import cup from "../assets/cup.png";
+import dog from "../assets/dog.png";
+import time from "../assets/time.png";
+import tree from "../assets/tree.png";
+import human from "../assets/human.png";
+import school from "../assets/school.png";
 
 import PhaserMatterCollisionPlugin from "phaser-matter-collision-plugin";
 import multiKey from "../multiKey.js";
 
 // Allows us to create scrollable parallax backgrounds through calling a method
-const createAligned = (scene, totalWidth, texture, scrollFactor, height) => {
+const createAligned = (scene, totalWidth, texture, scrollFactor) => {
+  const w = scene.textures.get(texture).getSourceImage().width;
+  const count = Math.ceil(totalWidth / w) * scrollFactor;
 
-  const w = scene.textures.get(texture).getSourceImage().width
-  const count = Math.ceil(totalWidth / w) * scrollFactor
+  let x = 0;
+  for (let i = 0; i < count; ++i) {
+    const m = scene.add
+      .image(x, 1000, texture)
+      .setOrigin(0, 0)
+      .setScrollFactor(scrollFactor);
 
-  let x = 0
-  for (let i = 0; i < count; ++i)
-  {
-    const m = scene.add.image(x, height, texture)
-      .setOrigin(0, 1)
-      .setScrollFactor(scrollFactor)
-
-    x += m.width
+    x += m.width;
   }
-}
+};
 
 const createRotatingPlatform = (scene, x, y, numTiles = 5) => {
   // Seesaw code borrowed from https://itnext.io/modular-game-worlds-in-phaser-3-tilemaps-5-matter-physics-platformer-d14d1f614557
   // A TileSprite is a Sprite whose texture repeats to fill the given width and height. We can use
   // this with an image from our tileset to create a platform composed of tiles:
   //flip the sprite after alpha for better collision
-  const platform = scene.add.tileSprite(x, y, 70 * numTiles, 24, "wooden");
+  const platform = scene.add.tileSprite(x, y, 70 * numTiles, 70, "wooden");
   //const platform = scene.add.image(x, y, wooden);
   scene.matter.add.gameObject(platform, {
     restitution: 0, // No bounciness
-    frictionAir: 0.1, // Spin forever without slowing down from air resistance
-    friction: 0.3, // A little extra friction so the player sticks better
+    frictionAir: 0, // Spin forever without slowing down from air resistance
+    friction: 0.2, // A little extra friction so the player sticks better
     // Density sets the mass and inertia based on area - 0.001 is the default. We're going lower
     // here so that the platform tips/rotates easily
-    density: 0.005
+    density: 0.005,
   });
 
   // Alias the native Matter.js API
@@ -79,7 +86,7 @@ const createRotatingPlatform = (scene, x, y, numTiles = 5) => {
   const constraint = Constraint.create({
     pointA: { x: platform.x, y: platform.y },
     bodyB: platform.body,
-    length: 0
+    length: 0,
   });
 
   // We need to add the constraint to the Matter world to activate it
@@ -89,8 +96,7 @@ const createRotatingPlatform = (scene, x, y, numTiles = 5) => {
   const sign = Math.random() < 0.5 ? -1 : 1;
   const angle = sign * Phaser.Math.Between(15, 25);
   platform.setAngle(angle);
-}
-
+};
 
 export default class lvl4 extends Phaser.Scene {
   constructor() {
@@ -99,17 +105,20 @@ export default class lvl4 extends Phaser.Scene {
   }
 
   preload() {
-
     this.load.image("tilessheet", ts);
-
+    //this.load.image("sky", sky);
     // Parallax assets
-    this.load.image("clouds_1", clouds_1);
-    this.load.image("clouds_2", clouds_2);
-    this.load.image("clouds_3", clouds_3);
-    this.load.image("clouds_4", clouds_4);
-    this.load.image("lvl4sky", lvl4sky);
-    this.load.image("rocks_1", rocks_1);
-    this.load.image("rocks_2", rocks_2);
+    // Will sort out after ALPHA
+    /*this.load.image("mist01", mist01);
+    this.load.image("bushes02", bushes02);
+    this.load.image("particles03", particles03);
+    this.load.image("forest04", forest04);
+    this.load.image("particles05", particles05);
+    this.load.image("forest06", forest06);
+    this.load.image("forest07", forest07);
+    this.load.image("forest08", forest08);
+    this.load.image("forest09", forest09);*/
+    this.load.image("sky10", sky10);
     this.load.image("barrel", barrel);
     this.load.image("wooden", wooden);
     this.load.image("dog", dog);
@@ -123,7 +132,6 @@ export default class lvl4 extends Phaser.Scene {
 
     //Loading exported TiledMap created in Tiled
     this.load.tilemapTiledJSON("map3", lvl4map);
-
 
     const {
       ENTER,
@@ -164,42 +172,57 @@ export default class lvl4 extends Phaser.Scene {
     console.log(height);
 
     // Setting parallax background
-    this.add.image(width * 0.5, height * 0.5, "lvl4sky").setScrollFactor(0);
+    // This portion is bugged in terms of the Y axis, maybe setScale?
+    this.add.image(width * 0.5, height * 0.5, "sky10").setScrollFactor(0);
 
     // Use createAligned method defined above to allow scrolling
-    createAligned(this, totalWidth, "rocks_1", 0.1, 900);
-    createAligned(this, totalWidth, "rocks_2", 0.2, 1370);
-    createAligned(this, totalWidth, "clouds_1", 0.4, 1200);
-    createAligned(this, totalWidth, "clouds_2", 0.5, 1200);
-    createAligned(this, totalWidth, "clouds_3", 0.6, 1200);
-    createAligned(this, totalWidth, "clouds_4", 0.7, 1200);
+    /*createAligned(this, totalWidth, "forest09", 0.3);
+    createAligned(this, totalWidth, "forest08", 0.35);
+    createAligned(this, totalWidth, "forest07", 0.4);
+    createAligned(this, totalWidth, "forest06", 0.45);
+    createAligned(this, totalWidth, "particles05", 0.5);
+    createAligned(this, totalWidth, "forest04", 0.55);
+    createAligned(this, totalWidth, "particles03", 0.6);
+    createAligned(this, totalWidth, "bushes02", 0.65);
+    createAligned(this, totalWidth, "mist01", 0.7);*/
 
-    var castlemaps = this.make.tilemap({ key:"map3" });
+    var castlemaps = this.make.tilemap({ key: "map3" });
     // Switched to extruded tilesheet to avoid tile pixel bleeding
     var tileset = castlemaps.addTilesetImage("btv", "tilessheet", 70, 70, 1, 2);
     var bg = castlemaps.createStaticLayer("lvl4bkobj", tileset, 0, 0);
-    var castlebounds = castlemaps.createStaticLayer("lvl4bounds", tileset, 0, 0);
-    var castleplatforms = castlemaps.createStaticLayer("lvl4platforms", tileset, 0, 0);
+    var castlebounds = castlemaps.createStaticLayer(
+      "lvl4bounds",
+      tileset,
+      0,
+      0
+    );
+    var castleplatforms = castlemaps.createStaticLayer(
+      "lvl4platforms",
+      tileset,
+      0,
+      0
+    );
     var changers = castlemaps.createStaticLayer("changers", tileset, 0, 0);
-    var lava = castlemaps.createStaticLayer("lava", tileset, 0, 0);
+    var ropes = castlemaps.createStaticLayer("ropes", tileset, 0, 0);
 
     // create the rotating seesaws
-    castlemaps.getObjectLayer("seesaws").objects.forEach(point =>{
-      createRotatingPlatform(this, point.x, point.y)
+    castlemaps.getObjectLayer("seesaws").objects.forEach((point) => {
+      createRotatingPlatform(this, point.x, point.y);
     });
 
     changers.setCollisionByProperty({ collides: true });
-    lava.setCollisionByProperty({ collides: true });
+    ropes.setCollisionByProperty({ collides: true });
     castlebounds.setCollisionByProperty({ collides: true });
     castleplatforms.setCollisionByProperty({ collides: true });
     this.matter.world.convertTilemapLayer(changers);
     this.matter.world.convertTilemapLayer(castleplatforms);
-    this.matter.world.convertTilemapLayer(lava);
+    this.matter.world.convertTilemapLayer(ropes);
     this.matter.world.convertTilemapLayer(castlebounds);
+    this.barrel = this.matter.add.image(660, 3500, "barrel", null);
+    this.barrel.setScale(1.5);
 
     // Add player to scene and set camera bounds
-    this.player = new Player(this, 1*70, 49*70);
-
+    this.player = new Player(this, 130, 3500);
 
     // setting up variable for last barrel placed
     var prevbarrel;
@@ -209,8 +232,13 @@ export default class lvl4 extends Phaser.Scene {
     // allow for faster barrel spawns
     var timer = this.time.addEvent({
       delay: 5500,
-      callback: function() {
-        this.barrel = this.matter.add.image(100*70, 10*70, "barrel", null, {restitution: 0.5, frictionStatic: 0.3, friction: 0.3, frictionAir: 0.005}); //4000
+      callback: function () {
+        this.barrel = this.matter.add.image(100 * 70, 10 * 70, "barrel", null, {
+          restitution: 0.5,
+          frictionStatic: 0.3,
+          friction: 0.3,
+          frictionAir: 0.005,
+        }); //4000
         this.barrel.setCircle();
         this.barrel.setScale(1.5);
         //this.barrel.setBounce(0.01);
@@ -220,22 +248,25 @@ export default class lvl4 extends Phaser.Scene {
         this.matterCollision.addOnCollideStart({
           objectA: this.player.sensors.top,
           objectB: this.barrel,
-          callback: eventData => {
+          callback: (eventData) => {
             // these constants are passed from the event to our callback method
             // bodies are the actual matter bodies and gameobjects are part of phaser
             const { bodyA, bodyB, gameObjectA, gameObjectB, pair } = eventData;
-          }
+          },
         });
 
-        var fadebarrel = this.tweens.add({
-          targets: this.barrel,
-          delay: 5000,
-          alpha: 0,
-          duration: 1000,
-          ease: 'Power2'
-        }, this);
-        if(prevbarrel){
-          if(prevbarrel.alpha >= 0.05){
+        var fadebarrel = this.tweens.add(
+          {
+            targets: this.barrel,
+            delay: 5000,
+            alpha: 0,
+            duration: 1000,
+            ease: "Power2",
+          },
+          this
+        );
+        if (prevbarrel) {
+          if (prevbarrel.alpha >= 0.05) {
             prevbarrel.destroy();
           }
         }
@@ -246,88 +277,167 @@ export default class lvl4 extends Phaser.Scene {
         //this.barrel.applyForceFromAngle(0.2, 180);
       },
       callbackScope: this,
-      loop: true
+      loop: true,
     });
 
-
-
-
-    this.cameras.main.setBounds(0, 0, castlemaps.widthInPixels, castlemaps.heightInPixels);
-    //this.cameras.main.roundPixels = true;
+    this.cameras.main.setBounds(
+      0,
+      0,
+      castlemaps.widthInPixels,
+      castlemaps.heightInPixels
+    );
     this.unsubscribePlayerCollide = this.matterCollision.addOnCollideStart({
       objectA: this.player.sprite,
       callback: this.onPlayerCollide,
-      context: this
+      context: this,
     });
 
     // set up array and dictionaries for puzzle images
     // add text for puzzle
-    this.add.text(40*70, 54*70, "Careful of the falling waste, traveler!", { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif', color: '#000', fontSize: '22px' });
-    this.add.text(177*70, 14*70, "To pass this level for free, you must answer these riddles three:\n\n1) There is a house. One enters it blind and comes out seeing. What is it?\n\n2) What goes on four legs in the morning, on two legs at noon,\nand on three legs in the evening?\n\n3) This thing all things devours; Birds, beasts, trees, flowers; Gnaws iron, bites steel;\nGrinds hard stones to meal; Slays king, ruins town, And beats mountain down.\n\nHit the boxes to select your answer.", { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif', color: '#000', fontSize: '18px' });
+    this.add.text(40 * 70, 54 * 70, "Careful of the falling waste, traveler!", {
+      fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif',
+      color: "#000",
+      fontSize: "22px",
+    });
+    this.add.text(
+      177 * 70,
+      14 * 70,
+      "To pass this level for free, you must answer these riddles three:\n\n1) There is a house. One enters it blind and comes out seeing. What is it?\n\n2) What goes on four legs in the morning, on two legs at noon,\nand on three legs in the evening?\n\n3) This thing all things devours; Birds, beasts, trees, flowers; Gnaws iron, bites steel;\nGrinds hard stones to meal; Slays king, ruins town, And beats mountain down.\n\nHit the boxes to select your answer.",
+      {
+        fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif',
+        color: "#000",
+        fontSize: "18px",
+      }
+    );
     var puzzpics = ["cup", "dog", "time", "tree", "human", "school"];
     var currentItem = "cup";
     var currentItem2 = "cup";
     var currentItem3 = "cup";
-    this.image1 = this.add.image((187*70)+20, 14*70, "cup", null);
+    this.image1 = this.add.image(187 * 70 + 20, 14 * 70, "cup", null);
     this.image1.setScale(0.5);
-    this.image2 = this.add.image((191*70)+20, 14*70, "cup", null);
+    this.image2 = this.add.image(191 * 70 + 20, 14 * 70, "cup", null);
     this.image2.setScale(0.5);
-    this.image3 = this.add.image((195*70)+20, 14*70, "cup", null);
+    this.image3 = this.add.image(195 * 70 + 20, 14 * 70, "cup", null);
     this.image3.setScale(0.5);
     console.log(this.image1);
 
     this.matterCollision.addOnCollideStart({
       objectA: this.player.sensors.top,
-      callback: eventData => {
+      callback: (eventData) => {
         // these constants are passed from the event to our callback method
         // bodies are the actual matter bodies and gameobjects are part of phaser
         const { bodyA, bodyB, gameObjectA, gameObjectB, pair } = eventData;
-        if(typeof gameObjectB === 'undefined' || gameObjectB === null) return;
-        if(typeof gameObjectB.layer === 'undefined' || gameObjectB.layer === null) return;
-            if(gameObjectB.layer.name == "changers" && gameObjectB.x == 187){
-              const currentIndex = puzzpics.indexOf(currentItem);
-              const nextIndex = (currentIndex + 1) % puzzpics.length;
-              currentItem = puzzpics[nextIndex];
-              this.image1.setTexture(currentItem);
-              //console.log(currentIndex, nextIndex, currentItem);
-            }
-            if(gameObjectB.layer.name == "changers" && gameObjectB.x == 191){
-              const currentIndex2 = puzzpics.indexOf(currentItem2);
-              const nextIndex2 = (currentIndex2 + 1) % puzzpics.length;
-              currentItem2 = puzzpics[nextIndex2];
-              this.image2.setTexture(currentItem2);
-              //console.log(currentIndex2, nextIndex2, currentItem2);
-            }
-            if(gameObjectB.layer.name == "changers" && gameObjectB.x == 195){
-              const currentIndex3 = puzzpics.indexOf(currentItem3);
-              const nextIndex3 = (currentIndex3 + 1) % puzzpics.length;
-              currentItem3 = puzzpics[nextIndex3];
-              this.image3.setTexture(currentItem3);
-              //console.log(currentIndex3, nextIndex3, currentItem3);
-            }
+        if (typeof gameObjectB === "undefined" || gameObjectB === null) return;
+        if (
+          typeof gameObjectB.layer === "undefined" ||
+          gameObjectB.layer === null
+        )
+          return;
+        if (gameObjectB.layer.name == "changers" && gameObjectB.x == 187) {
+          const currentIndex = puzzpics.indexOf(currentItem);
+          const nextIndex = (currentIndex + 1) % puzzpics.length;
+          currentItem = puzzpics[nextIndex];
+          this.image1.setTexture(currentItem);
+          //console.log(currentIndex, nextIndex, currentItem);
         }
+        if (gameObjectB.layer.name == "changers" && gameObjectB.x == 191) {
+          const currentIndex2 = puzzpics.indexOf(currentItem2);
+          const nextIndex2 = (currentIndex2 + 1) % puzzpics.length;
+          currentItem2 = puzzpics[nextIndex2];
+          this.image2.setTexture(currentItem2);
+          //console.log(currentIndex2, nextIndex2, currentItem2);
+        }
+        if (gameObjectB.layer.name == "changers" && gameObjectB.x == 195) {
+          const currentIndex3 = puzzpics.indexOf(currentItem3);
+          const nextIndex3 = (currentIndex3 + 1) % puzzpics.length;
+          currentItem3 = puzzpics[nextIndex3];
+          this.image3.setTexture(currentItem3);
+          //console.log(currentIndex3, nextIndex3, currentItem3);
+        }
+      },
 
+      //console.log(gameObjectB.layer, gameObjectB.x);
+    });
+
+    // set up array and dictionaries for puzzle images
+    // add text for puzzle
+    this.add.text(40 * 70, 54 * 70, "Careful of the falling waste, traveler!", {
+      fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif',
+      color: "#000",
+      fontSize: "22px",
+    });
+    this.add.text(
+      177 * 70,
+      14 * 70,
+      "To pass this level for free, you must answer these riddles three:\n\n1) There is a house. One enters it blind and comes out seeing. What is it?\n\n2) What goes on four legs in the morning, on two legs at noon,\nand on three legs in the evening?\n\n3) This thing all things devours; Birds, beasts, trees, flowers; Gnaws iron, bites steel;\nGrinds hard stones to meal; Slays king, ruins town, And beats mountain down.\n\nHit the boxes to select your answer.",
+      {
+        fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif',
+        color: "#000",
+        fontSize: "18px",
+      }
+    );
+    var puzzpics = ["cup", "dog", "time", "tree", "human", "school"];
+    var currentItem = "cup";
+    var currentItem2 = "cup";
+    var currentItem3 = "cup";
+    this.image1 = this.add.image(187 * 70 + 20, 14 * 70, "cup", null);
+    this.image1.setScale(0.5);
+    this.image2 = this.add.image(191 * 70 + 20, 14 * 70, "cup", null);
+    this.image2.setScale(0.5);
+    this.image3 = this.add.image(195 * 70 + 20, 14 * 70, "cup", null);
+    this.image3.setScale(0.5);
+
+    this.matterCollision.addOnCollideStart({
+      objectA: this.player.sensors.top,
+      //objectB: this.barrel,
+      callback: (eventData) => {
+        // these constants are passed from the event to our callback method
+        // bodies are the actual matter bodies and gameobjects are part of phaser
+        const { bodyA, bodyB, gameObjectA, gameObjectB, pair } = eventData;
+        if (gameObjectB.layer.name == "changers" && gameObjectB.x == 187) {
+          const currentIndex = puzzpics.indexOf(currentItem);
+          const nextIndex = (currentIndex + 1) % puzzpics.length;
+          currentItem = puzzpics[nextIndex];
+          this.image1.setTexture(currentItem);
+          //console.log(currentIndex, nextIndex, currentItem);
+        }
+        if (gameObjectB.layer.name == "changers" && gameObjectB.x == 191) {
+          const currentIndex2 = puzzpics.indexOf(currentItem2);
+          const nextIndex2 = (currentIndex2 + 1) % puzzpics.length;
+          currentItem2 = puzzpics[nextIndex2];
+          this.image2.setTexture(currentItem2);
+          //console.log(currentIndex2, nextIndex2, currentItem2);
+        }
+        if (gameObjectB.layer.name == "changers" && gameObjectB.x == 195) {
+          const currentIndex3 = puzzpics.indexOf(currentItem3);
+          const nextIndex3 = (currentIndex3 + 1) % puzzpics.length;
+          currentItem3 = puzzpics[nextIndex3];
+          this.image3.setTexture(currentItem3);
+          //console.log(currentIndex3, nextIndex3, currentItem3);
+        }
         //console.log(gameObjectB.layer, gameObjectB.x);
-
-
+      },
     });
   }
 
-  onNextScene(){
+  onNextScene() {
     this.player.freeze();
     this.scene.start("puzzle2");
   }
 
-
-
   onPlayerCollide({ gameObjectB }) {
     if (!gameObjectB || !(gameObjectB instanceof Phaser.Tilemaps.Tile)) return;
     if (!this) return;
-    if (this.player.sprite.isStatic()) return;
     var tile = gameObjectB;
     //var isEnterKeyDown = this.jumpInput.isDown();
-    console.log(tile);
-    if (tile.properties.isLethal) {
+
+    // Check the tile property set in Tiled (you could also just check the index if you aren't using
+    // Tiled in your game)
+    if (tile.layer.name == "ropes") {
+      this.player.sprite.setVelocityY(-15);
+      this.player.sprite.setVelocityX(-2);
+    }
+    if (tile.properties.isDoor) {
       // Unsubscribe from collision events so that this logic is run only once
       console.log("yes");
 
@@ -337,12 +447,11 @@ export default class lvl4 extends Phaser.Scene {
       console.log(cam.isTinted);
       cam.once("camerafadeoutcomplete", () => {
         cam.fadeIn(500, 0, 0, 0);
-        this.player.sprite.setPosition(107*70, (10*70)+40);
+        this.player.sprite.setPosition(107 * 70, 10 * 70 + 40);
       });
       cam.once("camerafadeincomplete", () => {
         this.player.unfreeze();
       });
-
     }
   }
   //after alpha play with camera zoom for riddle section
@@ -351,13 +460,17 @@ export default class lvl4 extends Phaser.Scene {
     const isEnterKeyDown = this.enterInput.isDown();
     if (!this.player.destroyed) {
       // Added 70 offset of Y to show more of the background and less of the ground
-      this.cameras.main.startFollow(this.player.sprite,false,1,1,0,70);
+      this.cameras.main.startFollow(this.player.sprite, false, 1, 1, 0, 70);
     }
 
     if (pointer.isDown) {
-      console.log(this.player.sprite.x, this.player.sprite.y)
+      console.log(this.player.sprite.x, this.player.sprite.y);
     }
-    if (this.image1.texture.key == "school" && this.image2.texture.key == "human" && this.image3.texture.key == "time") {
+    if (
+      this.image1.texture.key == "school" &&
+      this.image2.texture.key == "human" &&
+      this.image3.texture.key == "time"
+    ) {
       const cam = this.cameras.main;
       cam.fade(250, 0, 0, 0);
       cam.once("camerafadeoutcomplete", () => this.onNextScene());

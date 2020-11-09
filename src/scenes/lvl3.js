@@ -212,7 +212,7 @@ export default class lvl3 extends Phaser.Scene {
 
     // Updated to correctly use a constraint instead of pseudo constraint
     this.secondConstraint = Phaser.Physics.Matter.Matter.Constraint.create({
-      pointA: {x: 600, y: 350},
+      pointA: { x: 600, y: 350 },
       bodyB: this.red4.body,
       length: 0,
       stiffness: 0.05,
@@ -240,22 +240,34 @@ export default class lvl3 extends Phaser.Scene {
         this.scoreText.setText(this.playerScore + "/12 Orbs");
       },
     });
+
+    // Adding the constraint to the matter-js world
+    this.matter.world.add(this.secondConstraint);
   }
 
   onNextScene() {
-    this.scene.start("demo");
+    this.scene.start("lvl4");
   }
 
   update() {
-    if(this.playerScore >= 12){
+    if (this.playerScore >= 12) {
       this.onNextScene();
     }
 
-    if(!this.graphics) {
+    if (!this.graphics) {
       this.graphics = this.add.graphics();
     }
     this.graphics.clear();
-    this.matter.world.renderConstraint(this.secondConstraint, this.graphics, 0xFFFFFF, 1, 2, 1, 1, 1);
+    this.matter.world.renderConstraint(
+      this.secondConstraint,
+      this.graphics,
+      0xffffff,
+      1,
+      2,
+      1,
+      1,
+      1
+    );
     // We want to make sure the next ball does not spawn before the previous one is already flying.
     // Above logic will prevent a launching ball from colliding with one that just spawned.
     // If position of old orb is lower than 330 (technically higher not lower since Phaser sets the origin at the top left (0,0))
@@ -289,6 +301,12 @@ export default class lvl3 extends Phaser.Scene {
         },
       });
       this.secondConstraint.bodyB = this.red4.body;
+    }
+
+    var isEnterKeyDown = this.enterInput.isDown();
+    if (isEnterKeyDown) {
+      console.log("go to next level");
+      this.onNextScene();
     }
 
     // Back and forth motion for scoreboxes "walls"

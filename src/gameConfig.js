@@ -42,6 +42,7 @@ export default {
     FadeToBlack,
     Puzzle2,
     Puzzle3,
+    Level4,
   ],
   physics: {
     //converted to Matter-js to allow for polygon collision boxes

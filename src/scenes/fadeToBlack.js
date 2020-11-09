@@ -10,7 +10,7 @@ export default class FadeToBlack extends Phaser.Scene {
   create() {
     const self = this;
     const dialogue = new Dialogue(afterThrone, this, () => {
-      self.scene.start("lvl3");
+      self.scene.start("demo");
     });
     dialogue.startDialogue();
   }

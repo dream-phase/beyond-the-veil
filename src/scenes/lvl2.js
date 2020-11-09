@@ -11,6 +11,10 @@ import doorpng from "../assets/door.png";
 import heroine from "../assets/heroine01.png";
 import lvl3 from "./lvl3.js";
 
+// temporary holding spot
+import puzzle2 from "./puzzle2.js";
+import puzzle3 from "./puzzle3.js";
+
 // Parallax assets
 import mist01 from "../assets/01_Mist.png";
 import bushes02 from "../assets/02_Bushes.png";
@@ -119,7 +123,9 @@ export default class lvl2 extends Phaser.Scene {
 
   onNextScene(){
     this.player.freeze();
-    this.scene.start("lvl3");
+    //this.scene.start("lvl3");
+    this.scene.start("puzzle2");
+    //this.scene.start("puzzle3");
   }
 
 

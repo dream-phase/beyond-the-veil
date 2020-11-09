@@ -9,9 +9,17 @@ import wizardJson from "../assets/wizard.json";
 import dialoguebox from "../assets/dialoguebox.png";
 import PhaserMatterCollisionPlugin from "phaser-matter-collision-plugin";
 import Dialogue from "../dialogue";
-import tutorial from "../dialogues/tutorial.json";
+import introDialogue from "../dialogues/d-intro.json";
 import inventory from "../assets/inventory.png";
 import gargoyle from "../assets/gargoyle.png";
+import throneroomImg from "../assets/throneroom.bmp";
+import king from "../assets/king.png";
+
+const helpText = `
+[i]: open inventory
+[e]: interact with level
+[left mouse click]: attack
+`;
 
 export default class LoadScene extends Phaser.Scene {
   constructor() {
@@ -31,14 +39,22 @@ export default class LoadScene extends Phaser.Scene {
     self.load.image("door", door);
     self.load.atlas("wizard", wizard, wizardJson);
     self.load.image("dialoguebox", dialoguebox);
+    self.load.image("throneroomImg", throneroomImg);
+    self.load.image("king", king);
   }
 
   create() {
     const self = this;
-    self.tutorial = new Dialogue(tutorial, this, () => {
-      self.scene.start("demo");
+    const text = this.add.text(400, 128, helpText, {
+      font: "24px",
     });
-    self.tutorial.startDialogue();
+    text.setScrollFactor(0);
+    self.tutorial = new Dialogue(introDialogue, this, () => {
+      self.scene.start("throne-room");
+    });
+    setTimeout(() => {
+      self.tutorial.startDialogue();
+    }, 3000);
   }
 
   update() {}

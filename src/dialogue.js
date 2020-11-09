@@ -84,7 +84,7 @@ export default class Dialogue {
       this.lineText.setText("");
       dialogueLeaf.choices.forEach((choice, i) => {
         const textObj = this.game.add
-          .text(50, 495 + i * 32, choice[0].line, {
+          .text(50, 495 + i * 32, `${i + 1}. ${choice[0].line}`, {
             font: "24px",
             wordwrap: 500,
           })

@@ -6,6 +6,8 @@ import Level2 from "./scenes/lvl2";
 import Level3 from "./scenes/lvl3";
 import { Engine, Render, World, Bodies, Body } from "matter-js";
 import PhaserMatterCollisionPlugin from "phaser-matter-collision-plugin";
+import ThroneRoom from "./scenes/throneroom";
+import FadeToBlack from "./scenes/fadeToBlack";
 
 export default {
   type: Phaser.AUTO,
@@ -17,7 +19,7 @@ export default {
     text: "white",
     background: ["#FD7400", "#FFE11A", "#BEDB39", "#1F8A70", "#004358"],
   },
-  scene: [LoadScene, DemoScene, Level2, Level3], //
+  scene: [LoadScene, DemoScene, Level2, Level3, ThroneRoom, FadeToBlack],
   physics: {
     //converted to Matter-js to allow for polygon collision boxes
     default: "matter",

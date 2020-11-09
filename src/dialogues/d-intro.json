@@ -1,0 +1,29 @@
+{
+  "subtree": [
+    {
+      "speaker": "Gaurdsman",
+      "line": "Hail, sir."
+    },
+    {
+      "speaker": "Oracle",
+      "line": "Yes? What is it gaurdsman?"
+    },
+    {
+      "speaker": "Gaurdsman",
+      "line": "You have been summoned by his Royal Highness. He wishes to speek with you in the longwalk."
+    },
+    {
+      "speaker": "Oracle",
+      "line": "Is something the matter?"
+    },
+    {
+      "speaker": "Gaurdsman",
+      "line": "I am not at liberty to say, I'm afraid."
+    },
+    {
+      "speaker": "Oracle",
+      "line": "Indeed... very well. Show the way.",
+      "end": true
+    }
+  ]
+}

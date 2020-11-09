@@ -1,0 +1,57 @@
+{
+  "subtree": [
+    {
+      "speaker": "Oracle",
+      "line": "Your highness. (The oracle bows)"
+    },
+    {
+      "speaker": "King Nico",
+      "line": "At ease. Oracle, I have summoned you here to make an important request."
+    },
+    {
+      "speaker": "Oracle",
+      "line": "And what would you have me do, sire?"
+    },
+    {
+      "speaker": "King Nico",
+      "line": "Sir Anders is dead."
+    },
+    {
+      "speaker": "Oracle",
+      "line": "Dead? How can that be? I saw him on the grounds this morning."
+    },
+    {
+      "speaker": "King Nico",
+      "line": "Poison. The knight died drinking from a goblet of wine intended for me. I cannot help but be ashamed that I could allow this to happen."
+    },
+    {
+      "speaker": "Oracle",
+      "line": "His poor widow."
+    },
+    {
+      "speaker": "King Nico",
+      "line": "We believe that this attempt on my life might be the machinations of a someone in the court. We are not sure who though."
+    },
+    {
+      "speaker": "Oracle",
+      "line": "What do you intend to do, sir?"
+    },
+    {
+      "speaker": "King Nico",
+      "line": "As an oracle from the tower, you see things no one else can. Do you think you could help determine the traitor."
+    },
+    {
+      "speaker": "Oracle",
+      "line": "Oh, sir. I can see what I can do. Though my readings are not always as forthcoming as one might desire them to be."
+    },
+    {
+      "speaker": "King Nico",
+      "line": "You are one of the only people I can trust. And I fear something even more sinister is afoot than we might even imagine. Will you please help me?"
+    },
+    {
+      "speaker": "Oracle",
+      "line": "Of course, your Highness.",
+      "end": true
+    }
+  ]
+}

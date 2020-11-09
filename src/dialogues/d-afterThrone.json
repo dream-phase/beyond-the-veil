@@ -1,0 +1,25 @@
+{
+  "subtree": [
+    {
+      "speaker": "Oracle",
+      "line": "The King needs my help."
+    },
+    {
+      "speaker": "Oracle",
+      "line": "I have walked dreams before, but I suspect this will be much harder. Finding a culprit amidst mystery, they will try to hide themselves from me."
+    },
+    {
+      "speaker": "Oracle",
+      "line": "I will need to start performing the ritual."
+    },
+    {
+      "speaker": "Oracle",
+      "line": "I must find a way to make these beads align along my crystals."
+    },
+    {
+      "speaker": "Oracle",
+      "line": "Indeed... very well. Show the way.",
+      "end": true
+    }
+  ]
+}

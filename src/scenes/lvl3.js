@@ -9,7 +9,7 @@ import blueOrb from "../assets/orb_blue.png";
 import greenOrb from "../assets/orb_green.png";
 import redOrb from "../assets/orb_red.png";
 import brickWall from "../assets/tiles/brickWall.png";
-//import lvl4 from "./lvl4.js";
+import lvl4 from "./lvl4.js";
 
 export default class lvl3 extends Phaser.Scene {
   constructor() {
@@ -116,7 +116,7 @@ export default class lvl3 extends Phaser.Scene {
   }
 
   onNextScene(){
-    // I will add code here to transition to next scene when I finish it up
+    this.scene.start("lvl4");
   }
 
 
@@ -157,6 +157,12 @@ export default class lvl3 extends Phaser.Scene {
 
 
       }
+
+    var isEnterKeyDown = this.enterInput.isDown();
+    if (isEnterKeyDown) {
+      console.log("go to next level");
+      this.onNextScene();
+    }
 
     // Back and forth motion for scoreboxes "walls"
     if(this.wallRed.body.position.x >= 1150){

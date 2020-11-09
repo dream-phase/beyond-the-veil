@@ -35,10 +35,10 @@ export default class LoadScene extends Phaser.Scene {
 
   create() {
     const self = this;
-    self.tutorial = new Dialogue(tutorial, this, () => {
-      self.scene.start("demo");
-    });
-    self.tutorial.startDialogue();
+    //self.tutorial = new Dialogue(tutorial, this, () => {
+      self.scene.start("lvl4");
+    //});
+    //self.tutorial.startDialogue();
   }
 
   update() {}

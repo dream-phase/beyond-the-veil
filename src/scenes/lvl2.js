@@ -1,67 +1,12 @@
-/*jshint esversion: 6 */
-//Note: art assets were obtained from opengameart.org; all assets are licensed under CC-BY 3.0
-
-/**
- * Setting up parameters for parralax 'createAligned' method
- * @param {Phaser.Scene} scene
- * @param {number} totalWidth
- * @param {string} texture
- * @param {number} scrollFactor
- */
-
-// Set up parameters for scrolling bg
-
-/**
- *
- * @param {Phaser.Scene} scene
- * @param {number} totalWidth
- * @param {string} texture
- * @param {number} scrollFactor
- */
-
-// Global method for scrolling background
-
-const createAligned = (scene, totalWidth, texture, scrollFactor) => {
-  // Get width of texture to determine how many to repeat
-  const w = scene.textures.get(texture).getSourceImage().width;
-  const count = Math.ceil(totalWidth / w) * scrollFactor;
-
-  let x = 0;
-  // Actual repeat method
-  for (let i = 0; i < count; ++i) {
-    const m = scene.add
-      .image(x, scene.scale.height, texture)
-      .setOrigin(0, 1)
-      .setScrollFactor(scrollFactor);
-
-    x += m.width;
-  }
-};
-
 import Phaser from "phaser";
 import sky from "../assets/sky2.png";
 import ts from "../assets/tiles/tiles_spritesheet.png";
 import lvl2map from "../assets/lvl2.json";
 import doorpng from "../assets/door.png";
 import heroine from "../assets/heroine01.png";
-import lvl3 from "./lvl3.js";
-
 // temporary holding spot
 import puzzle2 from "./puzzle2.js";
 import puzzle3 from "./puzzle3.js";
-
-// Parallax assets
-import mist01 from "../assets/01_Mist.png";
-import bushes02 from "../assets/02_Bushes.png";
-import particles03 from "../assets/03_Particles.png";
-import forest04 from "../assets/04_Forest.png";
-import particles05 from "../assets/05_Particles.png";
-import forest06 from "../assets/06_Forest.png";
-import forest07 from "../assets/07_Forest.png";
-import forest08 from "../assets/08_Forest.png";
-import forest09 from "../assets/09_Forest.png";
-import sky10 from "../assets/10_Sky.png";
-
 import Player from "../player.js";
 import PhaserMatterCollisionPlugin from "phaser-matter-collision-plugin";
 import multiKey from "../multiKey.js";
@@ -131,6 +76,7 @@ export default class lvl2 extends Phaser.Scene {
       A,
       D,
       W,
+      I,
     } = Phaser.Input.Keyboard.KeyCodes;
     this.enterInput = new multiKey(this, [ENTER]);
     this.iInput = new multiKey(this, [I]);
@@ -248,7 +194,7 @@ export default class lvl2 extends Phaser.Scene {
   onNextScene() {
     this.player.freeze();
     //this.scene.start("lvl3");
-    this.scene.start("puzzle2");
+    this.scene.start("lvl3");
     //this.scene.start("puzzle3");
   }
 

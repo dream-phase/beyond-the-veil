@@ -109,13 +109,6 @@ export default class DemoScene extends Phaser.Scene {
     this.matter.world.convertTilemapLayer(doortile);
     //this.matter.world.setBounds(0, 0, sky.widthInPixels-300, sky.heightInPixels-300, true, true, true, true);
 
-    this.player = new Player(this, 600, 300);
-    this.unsubscribePlayerCollide = this.matterCollision.addOnCollideStart({
-      objectA: this.player.sprite,
-      callback: this.onPlayerCollide,
-      context: this,
-    });
-
     // this.npc = this.matter.add.sprite(700, 700, "heroine");
     // this.npc.setScale(1.5);
     // this.npc.body.setGravityY(300);

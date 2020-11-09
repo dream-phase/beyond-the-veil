@@ -5,7 +5,7 @@
       "line": "Halt. Who goes there?"
     },
     {
-      "speaker": "You",
+      "speaker": "Oracle",
       "line": "I hail from the Tower of Oracles. Are you the keeper of this fiery door?"
     },
     {
@@ -13,15 +13,15 @@
       "line": "Yes, walker. Only I can grant passage. What brings you into this corner of Mirari's abyss?"
     },
     {
-      "speaker": "You",
-      "line": "It is my charge to protect the life of our King, his Highness Marwyn Strakos the Third."
+      "speaker": "Oracle",
+      "line": "It is my charge to protect the life of our King."
     },
     {
-      "speaker": "You",
+      "speaker": "Oracle",
       "line": "Thus, have I travelled through dream upon dream seeking answers."
     },
     {
-      "speaker": "You",
+      "speaker": "Oracle",
       "line": "A trusted source has informed me that a key to the consipiracy on his life lies behind that door, this solemn corner of Mirari's mind."
     },
     {
@@ -29,7 +29,7 @@
       "line": "Well, I shall not grant passage to you."
     },
     {
-      "speaker": "You",
+      "speaker": "Oracle",
       "line": "And why not?"
     },
     {
@@ -42,7 +42,7 @@
       "choices": [
         [
           {
-            "speaker": "You",
+            "speaker": "Oracle",
             "line": "I see. How long have you guarded this door, creature?"
           },
           {
@@ -50,7 +50,7 @@
             "line": "The rage of this door has held fast for eight summers in the making."
           },
           {
-            "speaker": "You",
+            "speaker": "Oracle",
             "line": "All of eight summers?"
           },
           {
@@ -58,7 +58,7 @@
             "line": "The grievances perpetrated by the King are immense and hard to bear. Mirari's grief is boundless."
           },
           {
-            "speaker": "You",
+            "speaker": "Oracle",
             "line": "But why must you guard this place? Surely grief is better shared than harbored deep within."
           },
           {
@@ -69,7 +69,7 @@
         ],
         [
           {
-            "speaker": "You",
+            "speaker": "Oracle",
             "line": "For there is grief in my heart as well. "
           },
           {
@@ -77,31 +77,30 @@
             "line": "What anger do you hold?"
           },
           {
-            "speaker": "You",
+            "speaker": "Oracle",
             "line": "An anger burning bright. I have wondered through these dreams endlessly it would seem."
           },
           {
-            "speaker": "You",
+            "speaker": "Oracle",
             "line": "An anger burning bright. I have wondered through these dreams endlessly it would seem."
           },
           {
-            "speaker": "You",
+            "speaker": "Oracle",
             "line": "And yet I do not feel much closer to finding the truth."
           },
           {
-            "speaker": "You",
+            "speaker": "Oracle",
             "line": "Your master likely holds ill will for my homeland. I cannot help but anger."
           },
           {
             "speaker": "Guardian",
-            "line": "I know what your heart feels. If you wish to bear the heart of fire. I shall not stop you.",
-            "variables": [{ "name": "charm-guardian", "value": true }],
+            "line": "I know what your heart feels. If you wish to bear the heart of fire. I must challenge you to strike me down. I cannot dispel the curse until you do.",
             "end": true
           }
         ],
         [
           {
-            "speaker": "You",
+            "speaker": "Oracle",
             "line": "I need to pass through and you will not stand in my way."
           },
           {
@@ -109,7 +108,7 @@
             "line": "And how do you suppose to do so?"
           },
           {
-            "speaker": "You",
+            "speaker": "Oracle",
             "line": "By striking you down where you stand?"
           },
           {
@@ -118,11 +117,11 @@
           },
           {
             "speaker": "Guardian",
-            "line": "No, but I hold dominion over you with this: Vertrand's Staff of Rage."
+            "line": "No, but I hold dominion over you with my staff."
           },
           {
             "speaker": "Guardian",
-            "line": "You dare? Aaaaargh..."
+            "line": "You dare?"
           },
           {
             "speaker": "Guardian",

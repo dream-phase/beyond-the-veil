@@ -12,8 +12,8 @@ import Dialogue from "../dialogue";
 import introDialogue from "../dialogues/d-intro.json";
 import inventory from "../assets/inventory.png";
 import gargoyle from "../assets/gargoyle.png";
-import throneroomImg from "../assets/throneroom.bmp";
 import king from "../assets/king.png";
+import inTheClouds from "../assets/sounds/InTheClouds.mp3";
 
 const helpText = `
 [i]: open inventory
@@ -39,22 +39,26 @@ export default class LoadScene extends Phaser.Scene {
     self.load.image("door", door);
     self.load.atlas("wizard", wizard, wizardJson);
     self.load.image("dialoguebox", dialoguebox);
-    self.load.image("throneroomImg", throneroomImg);
     self.load.image("king", king);
+    self.load.audio("inTheClouds", inTheClouds);
   }
 
   create() {
     const self = this;
+    this.music = this.sound.add("inTheClouds");
     const text = this.add.text(400, 128, helpText, {
       font: "24px",
     });
     text.setScrollFactor(0);
     self.tutorial = new Dialogue(introDialogue, this, () => {
+      this.music.stop();
       self.scene.start("throne-room");
     });
     setTimeout(() => {
       self.tutorial.startDialogue();
     }, 3000);
+
+    this.music.play();
   }
 
   update() {}

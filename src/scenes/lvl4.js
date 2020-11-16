@@ -211,7 +211,7 @@ export default class lvl4 extends Phaser.Scene {
     this.barrel.setScale(1.5);
 
     // Add player to scene and set camera bounds
-    this.player = new Player(this, 130, 3500);
+    this.player = new Player(this, 182*70, 16*70);
 
 
     // setting up variable for last barrel placed
@@ -286,37 +286,40 @@ export default class lvl4 extends Phaser.Scene {
     this.image2.setScale(0.5);
     this.image3 = this.add.image((195*70)+20, 14*70, "cup", null);
     this.image3.setScale(0.5);
+    console.log(this.image1);
 
     this.matterCollision.addOnCollideStart({
       objectA: this.player.sensors.top,
-      //objectB: this.barrel,
       callback: eventData => {
         // these constants are passed from the event to our callback method
         // bodies are the actual matter bodies and gameobjects are part of phaser
-        const { bodyA, bodyB, gameObjectA, gameObjectB, pair } = eventData;
-        if(gameObjectB.layer.name == "changers" && gameObjectB.x == 187){
-          const currentIndex = puzzpics.indexOf(currentItem);
-          const nextIndex = (currentIndex + 1) % puzzpics.length;
-          currentItem = puzzpics[nextIndex];
-          this.image1.setTexture(currentItem);
-          //console.log(currentIndex, nextIndex, currentItem);
-        }
-        if(gameObjectB.layer.name == "changers" && gameObjectB.x == 191){
-          const currentIndex2 = puzzpics.indexOf(currentItem2);
-          const nextIndex2 = (currentIndex2 + 1) % puzzpics.length;
-          currentItem2 = puzzpics[nextIndex2];
-          this.image2.setTexture(currentItem2);
-          //console.log(currentIndex2, nextIndex2, currentItem2);
-        }
-        if(gameObjectB.layer.name == "changers" && gameObjectB.x == 195){
-          const currentIndex3 = puzzpics.indexOf(currentItem3);
-          const nextIndex3 = (currentIndex3 + 1) % puzzpics.length;
-          currentItem3 = puzzpics[nextIndex3];
-          this.image3.setTexture(currentItem3);
-          //console.log(currentIndex3, nextIndex3, currentItem3);
+        //fix this shit
+            const { bodyA, bodyB, gameObjectA, gameObjectB, pair } = eventData;
+            if(gameObjectB.layer.name == "changers" && gameObjectB.x == 187){
+              const currentIndex = puzzpics.indexOf(currentItem);
+              const nextIndex = (currentIndex + 1) % puzzpics.length;
+              currentItem = puzzpics[nextIndex];
+              this.image1.setTexture(currentItem);
+              //console.log(currentIndex, nextIndex, currentItem);
+            }
+            if(gameObjectB.layer.name == "changers" && gameObjectB.x == 191){
+              const currentIndex2 = puzzpics.indexOf(currentItem2);
+              const nextIndex2 = (currentIndex2 + 1) % puzzpics.length;
+              currentItem2 = puzzpics[nextIndex2];
+              this.image2.setTexture(currentItem2);
+              //console.log(currentIndex2, nextIndex2, currentItem2);
+            }
+            if(gameObjectB.layer.name == "changers" && gameObjectB.x == 195){
+              const currentIndex3 = puzzpics.indexOf(currentItem3);
+              const nextIndex3 = (currentIndex3 + 1) % puzzpics.length;
+              currentItem3 = puzzpics[nextIndex3];
+              this.image3.setTexture(currentItem3);
+              //console.log(currentIndex3, nextIndex3, currentItem3);
+            }
         }
         //console.log(gameObjectB.layer, gameObjectB.x);
-      }
+
+
     });
   }
 

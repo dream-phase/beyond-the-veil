@@ -158,9 +158,7 @@ export default class lvl3 extends Phaser.Scene {
 
       }
 
-    var isEnterKeyDown = this.enterInput.isDown();
-    if (isEnterKeyDown) {
-      console.log("go to next level");
+    if(this.playerScore >= 12){
       this.onNextScene();
     }
 

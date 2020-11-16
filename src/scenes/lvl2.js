@@ -124,7 +124,7 @@ export default class lvl2 extends Phaser.Scene {
   onNextScene(){
     this.player.freeze();
     //this.scene.start("lvl3");
-    this.scene.start("puzzle2");
+    this.scene.start("puzzle3");
     //this.scene.start("puzzle3");
   }
 

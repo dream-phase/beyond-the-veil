@@ -37,6 +37,7 @@ export default {
     DemoScene,
     Level2,
     Level3,
+    Level4,
     ThroneRoom,
     FadeToBlack,
     Puzzle2,

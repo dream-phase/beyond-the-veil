@@ -10,6 +10,7 @@ import greenOrb from "../assets/orb_green.png";
 import redOrb from "../assets/orb_red.png";
 import brickWall from "../assets/tiles/brickWall.png";
 import lvl4 from "./lvl4.js";
+import demo from "./demo.js";
 
 export default class lvl3 extends Phaser.Scene {
   constructor() {
@@ -39,7 +40,7 @@ export default class lvl3 extends Phaser.Scene {
 
   create() {
     this.playerScore = 0;
-    this.add.image(0, 0, "lvl3sky").setOrigin(0, 0);
+    //this.add.image(0, 0, "lvl3sky").setOrigin(0, 0);
     // No walls so balls will fly infinitely
     this.matter.world.setBounds(
       0,
@@ -93,7 +94,7 @@ export default class lvl3 extends Phaser.Scene {
       .setTint(0x0000ff)
       .setSensor(true);
 
-    this.add.image(0, 0, "sky");
+    this.add.image(0, 0, "sky").setOrigin(0, 0);
     // No walls so balls will fly infinitely
     this.matter.world.setBounds(0, 0, 944, 544, 70, false, false, false, false);
     var blue = this.matter.add.image(400, 300, "blueOrb");
@@ -255,14 +256,13 @@ export default class lvl3 extends Phaser.Scene {
   }
 
   onNextScene() {
-    // I will add code here to transition to next scene when I finish it up
-  }
-
-  onNextScene() {
-    // I will add code here to transition to next scene when I finish it up
+    this.scene.start("demo");
   }
 
   update() {
+    if(this.playerScore >= 12){
+      this.onNextScene();
+    }
     // We want to make sure the next ball does not spawn before the previous one is already flying.
     // Above logic will prevent a launching ball from colliding with one that just spawned.
     // If position of old orb is lower than 330 (technically higher not lower since Phaser sets the origin at the top left (0,0))
@@ -282,6 +282,7 @@ export default class lvl3 extends Phaser.Scene {
       this.red4.setBounce(0.8);
       this.red4.setFriction(0.05);
       this.red4.setMass(10);
+      this.red4.setFixedRotation();
       // Update constraint to ball we just spawned
       // We need a second matter collision method because we are creating a new orb on generation
       this.matterCollision.addOnCollideStart({

@@ -70,6 +70,9 @@ export default class Player {
     });
     //creating bottom sensor, l and r to determine if the sprite is colliding with the ground or wall
     this.sensors = {
+      top: Bodies.rectangle(32, -12, w * 0.25, 2, {
+        isSensor: true,
+      }),
       bottom: Bodies.rectangle(32, h * 0.5 - 12, w * 0.25, 2, {
         isSensor: true,
       }),
@@ -84,6 +87,7 @@ export default class Player {
     const compoundBody = Body.create({
       parts: [
         mainBody,
+        this.sensors.top,
         this.sensors.bottom,
         this.sensors.left,
         this.sensors.right,
@@ -119,20 +123,20 @@ export default class Player {
     this.scene.events.on("update", this.update, this);
 
     //sensor tracking implementation
-    this.isTouching = { left: false, right: false, ground: false };
-    this.sprite.isTouching = { left: false, right: false, ground: false };
+    this.isTouching = {top: false, left: false, right: false, ground: false };
+    this.sprite.isTouching = {top: false, left: false, right: false, ground: false };
     this.sprite.canJump = true;
     scene.matter.world.on("beforeupdate", this.resetTouching, this);
 
     setTimeout(() => {
       scene.matterCollision.addOnCollideStart({
-        objectA: [this.sensors.bottom, this.sensors.left, this.sensors.right],
+        objectA: [this.sensors.top, this.sensors.bottom, this.sensors.left, this.sensors.right],
         callback: this.onSensorCollide,
         context: this,
       });
 
       scene.matterCollision.addOnCollideActive({
-        objectA: [this.sensors.bottom, this.sensors.left, this.sensors.right],
+        objectA: [this.sensors.top, this.sensors.bottom, this.sensors.left, this.sensors.right],
         callback: this.onSensorCollide,
         context: this,
       });
@@ -172,8 +176,12 @@ export default class Player {
     } else if (bodyA === this.sensors.bottom) {
       this.isTouching.ground = true;
     }
+      else if (bodyA === this.sensors.top) {
+        this.isTouching.top = true;
+      }
   }
   resetTouching() {
+    this.isTouching.top = false;
     this.isTouching.left = false;
     this.isTouching.right = false;
     this.isTouching.ground = false;
@@ -229,14 +237,17 @@ export default class Player {
           }
           sprite.flipX = false;
         } else {
-          sprite.setVelocityX(7);
+            // implemented for level 4
+            if(!this.isTouching.top){
+              sprite.setVelocityX(7);
+            }
           if (this.isTouching.ground) {
             sprite.play("Run", true);
           }
           sprite.flipX = false;
         }
       } else {
-        sprite.setVelocityX(0);
+        //sprite.setVelocityX(0);
         sprite.setFrame("Idle/Idle-0.png");
       }
       if (!isOnGround) {

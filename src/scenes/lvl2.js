@@ -13,6 +13,7 @@ import multiKey from "../multiKey.js";
 import Dialogue from "../dialogue";
 import demoDialogue from "../dialogues/demoDialogue.json";
 import lvl3 from "./lvl3.js";
+import lvl4 from "./lvl4.js";
 // Parallax assets
 import mist01 from "../assets/01_Mist.png";
 import bushes02 from "../assets/02_Bushes.png";
@@ -194,7 +195,7 @@ export default class lvl2 extends Phaser.Scene {
   onNextScene() {
     this.player.freeze();
     //this.scene.start("lvl3");
-    this.scene.start("lvl3");
+    this.scene.start("lvl4");
     //this.scene.start("puzzle3");
   }
 

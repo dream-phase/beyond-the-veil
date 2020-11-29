@@ -12,22 +12,19 @@
 import Phaser from "phaser";
 import Player from "../player.js";
 import sky from "../assets/sky2.png";
-import ts from "../assets/tiles/tiles_spritesheet.png";
+import ts from "../assets/tiles/tiles_spritesheet_extruded.png";
 import lvl4map from "../assets/lvl4.json";
 import barrel from "../assets/barrel.png";
 import wooden from "../assets/tiles/bridgeLogs.png";
 
 // Parallax assets
-import mist01 from "../assets/01_Mist.png";
-import bushes02 from "../assets/02_Bushes.png";
-import particles03 from "../assets/03_Particles.png";
-import forest04 from "../assets/04_Forest.png";
-import particles05 from "../assets/05_Particles.png";
-import forest06 from "../assets/06_Forest.png";
-import forest07 from "../assets/07_Forest.png";
-import forest08 from "../assets/08_Forest.png";
-import forest09 from "../assets/09_Forest.png";
-import sky10 from "../assets/10_Sky.png";
+import clouds_1 from "../assets/clouds_1.png";
+import clouds_2 from "../assets/clouds_2.png";
+import clouds_3 from "../assets/clouds_3.png";
+import clouds_4 from "../assets/clouds_4.png";
+import rocks_1 from "../assets/rocks_1.png";
+import rocks_2 from "../assets/rocks_2.png";
+import lvl4sky from "../assets/lvl4sky.png";
 
 // Riddle puzzle assets
 import cup from "../assets/cup.png";
@@ -36,12 +33,13 @@ import time from "../assets/time.png";
 import tree from "../assets/tree.png";
 import human from "../assets/human.png";
 import school from "../assets/school.png";
+import puzzle2 from "../scenes/puzzle2.js"
 
 import PhaserMatterCollisionPlugin from "phaser-matter-collision-plugin";
 import multiKey from "../multiKey.js";
 
 // Allows us to create scrollable parallax backgrounds through calling a method
-const createAligned = (scene, totalWidth, texture, scrollFactor) => {
+const createAligned = (scene, totalWidth, texture, scrollFactor, height) => {
 
   const w = scene.textures.get(texture).getSourceImage().width
   const count = Math.ceil(totalWidth / w) * scrollFactor
@@ -49,8 +47,8 @@ const createAligned = (scene, totalWidth, texture, scrollFactor) => {
   let x = 0
   for (let i = 0; i < count; ++i)
   {
-    const m = scene.add.image(x, 1000, texture)
-      .setOrigin(0, 0)
+    const m = scene.add.image(x, height, texture)
+      .setOrigin(0, 1)
       .setScrollFactor(scrollFactor)
 
     x += m.width
@@ -62,7 +60,7 @@ const createRotatingPlatform = (scene, x, y, numTiles = 5) => {
   // A TileSprite is a Sprite whose texture repeats to fill the given width and height. We can use
   // this with an image from our tileset to create a platform composed of tiles:
   //flip the sprite after alpha for better collision
-  const platform = scene.add.tileSprite(x, y, 70 * numTiles, 70, "wooden");
+  const platform = scene.add.tileSprite(x, y, 70 * numTiles, 24, "wooden");
   //const platform = scene.add.image(x, y, wooden);
   scene.matter.add.gameObject(platform, {
     restitution: 0, // No bounciness
@@ -103,19 +101,15 @@ export default class lvl4 extends Phaser.Scene {
   preload() {
 
     this.load.image("tilessheet", ts);
-    //this.load.image("sky", sky);
+
     // Parallax assets
-    // Will sort out after ALPHA
-    /*this.load.image("mist01", mist01);
-    this.load.image("bushes02", bushes02);
-    this.load.image("particles03", particles03);
-    this.load.image("forest04", forest04);
-    this.load.image("particles05", particles05);
-    this.load.image("forest06", forest06);
-    this.load.image("forest07", forest07);
-    this.load.image("forest08", forest08);
-    this.load.image("forest09", forest09);*/
-    this.load.image("sky10", sky10);
+    this.load.image("clouds_1", clouds_1);
+    this.load.image("clouds_2", clouds_2);
+    this.load.image("clouds_3", clouds_3);
+    this.load.image("clouds_4", clouds_4);
+    this.load.image("lvl4sky", lvl4sky);
+    this.load.image("rocks_1", rocks_1);
+    this.load.image("rocks_2", rocks_2);
     this.load.image("barrel", barrel);
     this.load.image("wooden", wooden);
     this.load.image("dog", dog);
@@ -165,29 +159,24 @@ export default class lvl4 extends Phaser.Scene {
     //set up constants for canvas width and height
     const width = this.scale.width;
     const height = this.scale.height;
-    const totalWidth = width * 10;
+    const totalWidth = width * 21;
     console.log(width);
     console.log(height);
 
     // Setting parallax background
-    // This portion is bugged in terms of the Y axis, maybe setScale?
-    this.add.image(width * 0.5, height * 0.5, "sky10").setScrollFactor(0);
+    this.add.image(width * 0.5, height * 0.5, "lvl4sky").setScrollFactor(0);
 
     // Use createAligned method defined above to allow scrolling
-    /*createAligned(this, totalWidth, "forest09", 0.3);
-    createAligned(this, totalWidth, "forest08", 0.35);
-    createAligned(this, totalWidth, "forest07", 0.4);
-    createAligned(this, totalWidth, "forest06", 0.45);
-    createAligned(this, totalWidth, "particles05", 0.5);
-    createAligned(this, totalWidth, "forest04", 0.55);
-    createAligned(this, totalWidth, "particles03", 0.6);
-    createAligned(this, totalWidth, "bushes02", 0.65);
-    createAligned(this, totalWidth, "mist01", 0.7);*/
-
-
+    createAligned(this, totalWidth, "rocks_1", 0.1, 900);
+    createAligned(this, totalWidth, "rocks_2", 0.2, 1370);
+    createAligned(this, totalWidth, "clouds_1", 0.4, 1200);
+    createAligned(this, totalWidth, "clouds_2", 0.5, 1200);
+    createAligned(this, totalWidth, "clouds_3", 0.6, 1200);
+    createAligned(this, totalWidth, "clouds_4", 0.7, 1200);
 
     var castlemaps = this.make.tilemap({ key:"map3" });
-    var tileset = castlemaps.addTilesetImage("btv", "tilessheet");
+    // Switched to extruded tilesheet to avoid tile pixel bleeding
+    var tileset = castlemaps.addTilesetImage("btv", "tilessheet", 70, 70, 1, 2);
     var bg = castlemaps.createStaticLayer("lvl4bkobj", tileset, 0, 0);
     var castlebounds = castlemaps.createStaticLayer("lvl4bounds", tileset, 0, 0);
     var castleplatforms = castlemaps.createStaticLayer("lvl4platforms", tileset, 0, 0);
@@ -207,8 +196,6 @@ export default class lvl4 extends Phaser.Scene {
     this.matter.world.convertTilemapLayer(castleplatforms);
     this.matter.world.convertTilemapLayer(ropes);
     this.matter.world.convertTilemapLayer(castlebounds);
-    this.barrel = this.matter.add.image(660, 3500, "barrel", null);
-    this.barrel.setScale(1.5);
 
     // Add player to scene and set camera bounds
     this.player = new Player(this, 1*70, 49*70);
@@ -266,6 +253,7 @@ export default class lvl4 extends Phaser.Scene {
 
 
     this.cameras.main.setBounds(0, 0, castlemaps.widthInPixels, castlemaps.heightInPixels);
+    //this.cameras.main.roundPixels = true;
     this.unsubscribePlayerCollide = this.matterCollision.addOnCollideStart({
       objectA: this.player.sprite,
       callback: this.onPlayerCollide,
@@ -327,7 +315,7 @@ export default class lvl4 extends Phaser.Scene {
 
   onNextScene(){
     this.player.freeze();
-    this.scene.start("lvl3");
+    this.scene.start("puzzle2");
   }
 
 
@@ -344,15 +332,18 @@ export default class lvl4 extends Phaser.Scene {
       this.player.sprite.setVelocityY(-15);
       this.player.sprite.setVelocityX(-2);
     }
-    if (tile.properties.isDoor) {
+    if (tile.properties.isLethal) {
       // Unsubscribe from collision events so that this logic is run only once
       console.log("yes");
       this.unsubscribePlayerCollide();
 
       this.player.freeze();
       const cam = this.cameras.main;
-      cam.fade(250, 0, 0, 0);
-      cam.once("camerafadeoutcomplete", () => this.scene.restart());
+      cam.fadeOut(500, 0, 0, 0);
+      cam.once("camerafadeoutcomplete", () => {
+        this.player.sprite.setPosition(107*70, 10*70);
+        cam.fadeIn(500, 0, 0, 0);
+      });
     }
   }
   //after alpha play with camera zoom for riddle section

@@ -151,7 +151,7 @@ export default class lvl2 extends Phaser.Scene {
     createAligned(this, totalWidth, "stars", 0.2);
 
     var castlemaps = this.make.tilemap({ key: "map2" });
-    var tileset = castlemaps.addTilesetImage("btv", "tilessheet");
+    var tileset = castlemaps.addTilesetImage("btv", "tilessheet", 70, 70, 1, 2);
     var bg = castlemaps.createStaticLayer("castlebkobj", tileset, 0, 0);
     var castlebounds = castlemaps.createStaticLayer(
       "castlebounds",

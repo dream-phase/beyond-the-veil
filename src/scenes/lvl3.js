@@ -191,6 +191,7 @@ export default class lvl3 extends Phaser.Scene {
     this.red4.setFriction(0.05);
 
     // Mouse control
+    // Look at initial speed
     this.matter.add.mouseSpring({ length: 1, stiffness: 0.6 });
     // Collisions
     var col1 = this.matter.world.nextCategory();

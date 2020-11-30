@@ -1,0 +1,17 @@
+{
+  "subtree": [
+    {
+      "speaker": "Guardian",
+      "line": "The next game I have for you is simple. The energy flowing through this real is getting blocked by these stones of thought."
+    },
+    {
+      "speaker": "Gaurdian",
+      "line": "I need you to remove them. To do so, select a stone. This stone can leap over an adjacent stone as long there is an empty space for it to leap to"
+    },
+    {
+      "speaker": "Guardian",
+      "line": "Any stone that is leaped over is removed from the board. I will lete you pass when there are four stones or fewer left.",
+      "end": true
+    }
+  ]
+}

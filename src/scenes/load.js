@@ -53,7 +53,7 @@ export default class LoadScene extends Phaser.Scene {
     });
     text.setScrollFactor(0);
     self.tutorial = new Dialogue(introDialogue, this, () => {
-      self.scene.start("lvl4");
+      self.scene.start("throne-room");
       self.game.sound.stopAll();
     });
     setTimeout(() => {

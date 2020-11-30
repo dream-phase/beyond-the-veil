@@ -1,7 +1,9 @@
 import Phaser from "phaser";
 import sky from "../assets/sky2.png";
+import Dialogue from "../dialogue";
+import checkers from "../dialogues/d-checkers.json";
 
-export default class Puzzle2 extends Phaser.Scene {
+export default class puzzle2 extends Phaser.Scene {
   constructor() {
     super({ key: "puzzle2" });
   }
@@ -11,13 +13,19 @@ export default class Puzzle2 extends Phaser.Scene {
   }
 
   create() {
-    this.add.image(0, 0, "sky");
+    this.inDialogue = true;
+
+    this.won = false;
+    this.add.image(0, 0, "sky").setScale(2);
 
     //game board
     var graphics = this.add.graphics({
-      lineStyle: { width: 2, color: 0x0000aa },
-      fillStyle: { color: 0xaa0000 },
+      lineStyle: { width: 2, color: 0x612f0b },
+      fillStyle: { color: 0xd4b06a },
     });
+
+    var board1 = new Phaser.Geom.Rectangle();
+
     var rect = new Phaser.Geom.Rectangle(400, 60, 180, 420);
     var rect1 = new Phaser.Geom.Rectangle(280, 180, 420, 180);
 
@@ -31,6 +39,8 @@ export default class Puzzle2 extends Phaser.Scene {
     var line6 = new Phaser.Geom.Line(340, 180, 340, 360);
     var line7 = new Phaser.Geom.Line(640, 180, 640, 360);
 
+    graphics.fillRect(400, 60, 180, 420);
+    graphics.fillRect(280, 180, 420, 180);
     graphics.strokeRectShape(rect);
     graphics.strokeRectShape(rect1);
     graphics.strokeLineShape(line);
@@ -82,7 +92,7 @@ export default class Puzzle2 extends Phaser.Scene {
     this.selectorGraphics = this.add.graphics({
       fillStyle: { color: 0x00ff00 },
     });
-    this.pieceGraphics = this.add.graphics({ fillStyle: { color: 0xff0000 } });
+    this.pieceGraphics = this.add.graphics({ fillStyle: { color: 0x000 } });
 
     this.x = 0;
     this.y = 0;
@@ -91,15 +101,22 @@ export default class Puzzle2 extends Phaser.Scene {
     this.x2 = 0;
     this.y2 = 0;
 
-    this.restartButton = this.add.text(50, 50, "RESTART", { fill: 0xff0000 });
+    this.restartButton = this.add.text(50, 50, "RESTART", { fill: "#fff" });
     this.restartButton.setInteractive().on("pointerdown", () => this.restart());
+    this.dialogue = new Dialogue(checkers, this, () => {
+      this.inDialogue = false;
+    });
+    this.dialogue.startDialogue();
   }
 
-  onNextScene() {}
+  onNextScene() {
+    this.scene.start("puzzle3");
+  }
+
   update() {
     this.pieceGraphics.clear();
     var pointer = this.input.activePointer;
-    if (pointer.isDown && !this.selected) {
+    if (pointer.isDown && !this.selected && !this.inDialogue) {
       this.x = Math.floor((pointer.worldX - 280) / 60);
       this.y = Math.floor((pointer.worldY - 60) / 60);
       if (this.pieces.includes(this.x.toString() + this.y.toString())) {
@@ -243,10 +260,20 @@ export default class Puzzle2 extends Phaser.Scene {
         90 + 60 * parseInt(this.pieces[i][1]),
         25
       );
-      //  var graphics = this.add.graphics({ fillStyle: { color: 0xff0000 } });
+
       this.pieceGraphics.fillCircleShape(circle);
     }
+
+    if (this.pieces.length <= 5) {
+      this.continueButton = this.add.text(50, 150, "CONTINUE", {
+        fill: "#fff",
+      });
+      this.continueButton
+        .setInteractive()
+        .on("pointerdown", () => this.onNextScene());
+    }
   }
+
   restart() {
     this.selected = false;
     this.selectorGraphics.clear();

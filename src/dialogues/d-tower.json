@@ -1,0 +1,17 @@
+{
+  "subtree": [
+    {
+      "speaker": "Guardian",
+      "line": "The last trial I have for you is to sort move the tower."
+    },
+    {
+      "speaker": "Guardian",
+      "line": "Levels of the tower may be moved from one tower to next. But a larger platform cannot go on top of a smaller platform."
+    },
+    {
+      "speaker": "Gaurdian",
+      "line": "Can you get the tower from one to another in the same order?",
+      "end": true
+    }
+  ]
+}

@@ -6,102 +6,106 @@
     },
     {
       "speaker": "Oracle",
-      "line": "I hail from the Tower of Oracles. Are you the keeper of this fiery door?"
+      "line": "I hail from the Tower of Oracles. This is the first time I have traversed the realm of dreams."
     },
     {
       "speaker": "Statue",
-      "line": "Yes, walker. Only I can grant passage. What brings you into this corner of Mirari's abyss?"
+      "line": "Oh, so you are a walker?"
     },
     {
       "speaker": "Oracle",
-      "line": "It is my charge to protect the life of our King."
+      "line": "Indeed. It is my charge to protect the life of our King. One of our knights was poisoned by wine intended for the king."
+    },
+    {
+      "speaker": "Statue",
+      "line": "It would seem that there is scandal at the court."
     },
     {
       "speaker": "Oracle",
-      "line": "Thus, have I travelled through dream upon dream seeking answers."
+      "line": "It is my charge to protect the life of our King. Do you have the answers I seek?"
+    },
+    {
+      "speaker": "Gaurdian",
+      "line": "I might indeed. I am the guardian appointed to this part of the abyss. I hold in my mind the whims and fears of all those present in the royal court."
     },
     {
       "speaker": "Oracle",
-      "line": "A trusted source has informed me that a key to the consipiracy on his life lies behind that door, this solemn corner of Mirari's mind."
+      "line": "Truly? Then please, who is behind this foul plot?"
     },
     {
       "speaker": "Guardian",
-      "line": "Well, I shall not grant passage to you."
+      "line": "I shall not tell you."
     },
     {
       "speaker": "Oracle",
-      "line": "And why not?"
+      "line": "You shan't? And why not?"
     },
     {
       "speaker": "Guardian",
       "line": "You are not worthy..."
     },
     {
+      "speaker": "Oracle",
+      "line": "Not worthy...? What would make me worthy."
+    },
+    {
       "speaker": "Guardian",
-      "line": "There is nothing for you here.",
+      "line": "The minds of others are not privy to any mortal lest they prove to me that they can beat my game."
+    },
+    {
+      "speaker": "Guardian",
+      "line": "The minds of others are not privy to any mortal lest they prove to me that they can beat my game.",
       "choices": [
         [
           {
             "speaker": "Oracle",
-            "line": "I see. How long have you guarded this door, creature?"
+            "line": "And what game is this?"
           },
           {
             "speaker": "Guardian",
-            "line": "The rage of this door has held fast for eight summers in the making."
+            "line": "A simple game. You must answers my riddles."
           },
           {
             "speaker": "Oracle",
-            "line": "All of eight summers?"
+            "line": "Riddles?"
           },
           {
             "speaker": "Guardian",
-            "line": "The grievances perpetrated by the King are immense and hard to bear. Mirari's grief is boundless."
+            "line": "Indeed. I will take you there too."
           },
           {
             "speaker": "Oracle",
-            "line": "But why must you guard this place? Surely grief is better shared than harbored deep within."
+            "line": "Take me where?"
           },
           {
             "speaker": "Guardian",
-            "line": "Grief is part of the problem. Another part is Strakos. Prove to me that you know of the problem.",
+            "line": "Strike me down with your staff and you will see.",
             "end": true
           }
         ],
         [
           {
             "speaker": "Oracle",
-            "line": "For there is grief in my heart as well. "
+            "line": "I have no time for games."
           },
           {
             "speaker": "Guardian",
-            "line": "What anger do you hold?"
+            "line": "You will play my games lest you wish to rot in this realm for all eternity."
           },
           {
             "speaker": "Oracle",
-            "line": "An anger burning bright. I have wondered through these dreams endlessly it would seem."
-          },
-          {
-            "speaker": "Oracle",
-            "line": "An anger burning bright. I have wondered through these dreams endlessly it would seem."
-          },
-          {
-            "speaker": "Oracle",
-            "line": "And yet I do not feel much closer to finding the truth."
-          },
-          {
-            "speaker": "Oracle",
-            "line": "Your master likely holds ill will for my homeland. I cannot help but anger."
+            "line": "Fine. What would you have me do?"
           },
           {
             "speaker": "Guardian",
-            "line": "I know what your heart feels. If you wish to bear the heart of fire. I must challenge you to strike me down. I cannot dispel the curse until you do.",
+            "line": "Strike me down with your staff and you will see.",
             "end": true
           }
         ],
         [
           {
             "speaker": "Oracle",
-            "line": "I need to pass through and you will not stand in my way."
+            "line": "You will not stand in my way."
           },
           {
             "speaker": "Guardian",
@@ -109,23 +113,19 @@
           },
           {
             "speaker": "Oracle",
-            "line": "By striking you down where you stand?"
+            "line": "By striking you down where you stand."
           },
           {
             "speaker": "Guardian",
-            "line": "I am rage. I am Mirari's spirit of vengeance. Do you think that I could buckle so easily?"
+            "line": "Foolish mortals. Strike me down and see how that might help you."
           },
           {
             "speaker": "Guardian",
-            "line": "No, but I hold dominion over you with my staff."
+            "line": "Your staff holds no dominion over me."
           },
           {
-            "speaker": "Guardian",
-            "line": "You dare?"
-          },
-          {
-            "speaker": "Guardian",
-            "line": "You must attack me!",
+            "speaker": "Oracle",
+            "line": "We shall see about that.",
             "end": true
           }
         ]

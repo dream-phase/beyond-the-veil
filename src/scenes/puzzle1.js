@@ -7,12 +7,16 @@ import blueOrb from "../assets/orb_blue.png";
 import greenOrb from "../assets/orb_green.png";
 import redOrb from "../assets/orb_red.png";
 import brickWall from "../assets/tiles/brickWall.png";
+import crystalGreen from "../assets/crystal_green.png";
+import crystalRed from "../assets/crystal_red.png";
+import chime from "../assets/sounds/chime.mp3";
+import crystalBlue from "../assets/crystal_blue.png";
 import lvl4 from "./lvl4.js";
 import demo from "./demo.js";
 
 export default class Puzzle1 extends Phaser.Scene {
   constructor() {
-    super({ key: "puzzle1" });
+    super({ key: "Puzzle1" });
     //var cursors;
   }
 
@@ -21,6 +25,11 @@ export default class Puzzle1 extends Phaser.Scene {
     this.load.image("blueOrb", blueOrb);
     this.load.image("greenOrb", greenOrb);
     this.load.image("brickWall", brickWall);
+    this.load.image("crystalRed", crystalRed);
+    this.load.image("crystalBlue", crystalBlue);
+    this.load.image("crystalGreen", crystalGreen);
+    this.load.audio("chime", chime);
+
     this.load.image("redOrb", redOrb);
     const {
       ENTER,
@@ -37,6 +46,7 @@ export default class Puzzle1 extends Phaser.Scene {
   }
 
   create() {
+    this.chime = this.sound.add("chime", { volume: 0.3 });
     this.playerScore = 0;
     //this.add.image(0, 0, "lvl3sky").setOrigin(0, 0);
     // No walls so balls will fly infinitely
@@ -54,43 +64,6 @@ export default class Puzzle1 extends Phaser.Scene {
     this.red4 = this.matter.add.image(600, 350, "redOrb", null, {
       label: "redOrb",
     });
-
-    // x, y, image, null, inertia: Infinity will ensure that block loses no velocity on bounce
-    // Don't want player to move scoreboxes "walls" so ignorePointer
-    // Sensor allows the blocks not to interact with the matter-js physics, but it will still detect collisions
-    this.wallRed = this.matter.add
-      .image(100, 100, "brickWall", null, {
-        label: "brickWallRed",
-        inertia: Infinity,
-        ignorePointer: true,
-      })
-      .setFriction(0, 0, 0)
-      .setBounce(1)
-      .setIgnoreGravity(true)
-      .setTint(0xff0000)
-      .setSensor(true);
-    this.wallGreen = this.matter.add
-      .image(100, 100, "brickWall", null, {
-        label: "brickWallGreen",
-        inertia: Infinity,
-        ignorePointer: true,
-      })
-      .setFriction(0, 0, 0)
-      .setBounce(1)
-      .setIgnoreGravity(true)
-      .setTint(0x00ff00)
-      .setSensor(true);
-    this.wallBlue = this.matter.add
-      .image(100, 100, "brickWall", null, {
-        label: "brickWallBlue",
-        inertia: Infinity,
-        ignorePointer: true,
-      })
-      .setFriction(0, 0, 0)
-      .setBounce(1)
-      .setIgnoreGravity(true)
-      .setTint(0x0000ff)
-      .setSensor(true);
 
     this.add.image(0, 0, "sky").setOrigin(0, 0);
     // No walls so balls will fly infinitely
@@ -117,7 +90,7 @@ export default class Puzzle1 extends Phaser.Scene {
     // Don't want player to move scoreboxes "walls" so ignorePointer
     // Sensor allows the blocks not to interact with the matter-js physics, but it will still detect collisions
     this.wallRed = this.matter.add
-      .image(100, 100, "brickWall", null, {
+      .image(100, 100, "crystalRed", null, {
         label: "brickWallRed",
         inertia: Infinity,
         ignorePointer: true,
@@ -125,10 +98,10 @@ export default class Puzzle1 extends Phaser.Scene {
       .setFriction(0, 0, 0)
       .setBounce(1)
       .setIgnoreGravity(true)
-      .setTint(0xff0000)
-      .setSensor(true);
+      .setSensor(true)
+      .setAngularVelocity(0.1);
     this.wallGreen = this.matter.add
-      .image(100, 100, "brickWall", null, {
+      .image(100, 100, "crystalGreen", null, {
         label: "brickWallGreen",
         inertia: Infinity,
         ignorePointer: true,
@@ -136,10 +109,10 @@ export default class Puzzle1 extends Phaser.Scene {
       .setFriction(0, 0, 0)
       .setBounce(1)
       .setIgnoreGravity(true)
-      .setTint(0x00ff00)
-      .setSensor(true);
+      .setSensor(true)
+      .setAngularVelocity(-0.1);
     this.wallBlue = this.matter.add
-      .image(100, 100, "brickWall", null, {
+      .image(100, 100, "crystalBlue", null, {
         label: "brickWallBlue",
         inertia: Infinity,
         ignorePointer: true,
@@ -147,8 +120,8 @@ export default class Puzzle1 extends Phaser.Scene {
       .setFriction(0, 0, 0)
       .setBounce(1)
       .setIgnoreGravity(true)
-      .setTint(0x0000ff)
-      .setSensor(true);
+      .setSensor(true)
+      .setAngularVelocity(0.05);
 
     this.wallRed.setVelocityX(5);
     this.wallGreen.setVelocityX(6);
@@ -235,6 +208,7 @@ export default class Puzzle1 extends Phaser.Scene {
         const { bodyA, bodyB, gameObjectA, gameObjectB, pair } = eventData;
         gameObjectA.setVisible(false);
         this.playerScore++;
+        this.chime.play();
         this.scoreText.setText(this.playerScore + "/12 Orbs");
       },
     });
@@ -292,6 +266,7 @@ export default class Puzzle1 extends Phaser.Scene {
           const { bodyA, bodyB, gameObjectA, gameObjectB, pair } = eventData;
           gameObjectA.setVisible(false);
           this.playerScore++;
+          this.chime.play();
           this.scoreText.setText(this.playerScore + "/12 Orbs");
         },
       });

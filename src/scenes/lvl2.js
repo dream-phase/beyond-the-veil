@@ -12,10 +12,9 @@ import PhaserMatterCollisionPlugin from "phaser-matter-collision-plugin";
 import multiKey from "../multiKey.js";
 import Dialogue from "../dialogue";
 import demoDialogue from "../dialogues/demoDialogue.json";
-import lvl3 from "./lvl3.js";
-import lvl4 from "./lvl4.js";
 // Parallax assets
 import mist01 from "../assets/01_Mist.png";
+import roar from "../assets/sounds/roar.mp3";
 import bushes02 from "../assets/02_Bushes.png";
 import particles03 from "../assets/03_Particles.png";
 import forest04 from "../assets/04_Forest.png";
@@ -64,6 +63,7 @@ export default class lvl2 extends Phaser.Scene {
     this.load.image("forest08", forest08);
     this.load.image("forest09", forest09);
     this.load.image("sky10", sky10);
+    this.load.audio("roar", roar);
 
     //Loading exported TiledMap created in Tiled
     this.load.tilemapTiledJSON("map2", lvl2map);
@@ -107,6 +107,7 @@ export default class lvl2 extends Phaser.Scene {
     console.log(width);
     console.log(height);
 
+    this.roar = this.sound.add("roar");
     // Setting parallax background
     this.add.image(width * 0.5, height * 0.5, "sky10").setScrollFactor(0);
     this.add
@@ -193,6 +194,7 @@ export default class lvl2 extends Phaser.Scene {
     setTimeout(() => {
       dialogue.startDialogue();
     }, 150);
+    this.sound.add("whoosh", { volume: 0.3 }).play();
   }
 
   onNextScene() {
@@ -231,6 +233,10 @@ export default class lvl2 extends Phaser.Scene {
       const self = this;
       setTimeout(() => {
         self.gargoyle.destroy();
+        self.roar.play();
+        setTimeout(() => {
+          self.onNextScene();
+        }, 2000);
       }, 800);
 
       const isiKeyDown = this.iInput.isDown();

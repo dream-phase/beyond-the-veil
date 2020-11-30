@@ -1,0 +1,49 @@
+{
+  "subtree": [
+    {
+      "speaker": "Guardian",
+      "line": "I see you have found my riddle bank."
+    },
+    {
+      "speaker": "Oracle",
+      "line": "Riddle bank?"
+    },
+    {
+      "speaker": "Guardian",
+      "line": "If you jump and hit the bottom of these boxes you shall find images in your mind of what the answers to my riddles are"
+    },
+    {
+      "speaker": "Oracle",
+      "line": "And what are these riddles?"
+    },
+    {
+      "speaker": "Gaurdsman",
+      "line": "The first is this: There is a house. One enters it blind and comes out seeing. What is it?"
+    },
+    {
+      "speaker": "Gaurdsman",
+      "line": "The second is this: What goes on four legs in the morning, on two legs at noon, and on three legs in the evening?"
+    },
+    {
+      "speaker": "Gaurdsman",
+      "line": "The this is this: This thing all things devours; Birds, beasts, trees, flowers; Gnaws iron, bites steel; Grinds hard stones to meal; Slays king, ruins town, And beats mountain down."
+    },
+    {
+      "speaker": "Gaurdsman",
+      "line": "Answer these three, and I will give you my next trial."
+    },
+    {
+      "speaker": "Oracle",
+      "line": "Next trial?"
+    },
+    {
+      "speaker": "Guardian",
+      "line": "*the guardian is silent*"
+    },
+    {
+      "speaker": "Oracle",
+      "line": "Blast it all.",
+      "end": true
+    }
+  ]
+}

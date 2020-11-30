@@ -21,6 +21,7 @@ import {
 } from "matter-js";
 import PhaserMatterCollisionPlugin from "phaser-matter-collision-plugin";
 import Puzzle1 from "./scenes/puzzle1";
+import StartScreen from "./scenes/startScreen";
 
 export default {
   type: Phaser.AUTO,
@@ -33,20 +34,16 @@ export default {
     background: ["#FD7400", "#FFE11A", "#BEDB39", "#1F8A70", "#004358"],
   },
   scene: [
+    StartScreen,
     LoadScene,
     DemoScene,
     Level2,
-<<<<<<< HEAD
-    Level3,
     Level4,
-=======
->>>>>>> d11aaad... Fixed dialogues and new branches.
     ThroneRoom,
     FadeToBlack,
     Puzzle1,
     Puzzle2,
     Puzzle3,
-    Level4,
   ],
   physics: {
     //converted to Matter-js to allow for polygon collision boxes

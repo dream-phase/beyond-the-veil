@@ -123,20 +123,35 @@ export default class Player {
     this.scene.events.on("update", this.update, this);
 
     //sensor tracking implementation
-    this.isTouching = {top: false, left: false, right: false, ground: false };
-    this.sprite.isTouching = {top: false, left: false, right: false, ground: false };
+    this.isTouching = { top: false, left: false, right: false, ground: false };
+    this.sprite.isTouching = {
+      top: false,
+      left: false,
+      right: false,
+      ground: false,
+    };
     this.sprite.canJump = true;
     scene.matter.world.on("beforeupdate", this.resetTouching, this);
 
     setTimeout(() => {
       scene.matterCollision.addOnCollideStart({
-        objectA: [this.sensors.top, this.sensors.bottom, this.sensors.left, this.sensors.right],
+        objectA: [
+          this.sensors.top,
+          this.sensors.bottom,
+          this.sensors.left,
+          this.sensors.right,
+        ],
         callback: this.onSensorCollide,
         context: this,
       });
 
       scene.matterCollision.addOnCollideActive({
-        objectA: [this.sensors.top, this.sensors.bottom, this.sensors.left, this.sensors.right],
+        objectA: [
+          this.sensors.top,
+          this.sensors.bottom,
+          this.sensors.left,
+          this.sensors.right,
+        ],
         callback: this.onSensorCollide,
         context: this,
       });
@@ -176,10 +191,9 @@ export default class Player {
       if (pair.separation > 0.5) this.sprite.x -= pair.separation - 0.5;
     } else if (bodyA === this.sensors.bottom) {
       this.isTouching.ground = true;
+    } else if (bodyA === this.sensors.top) {
+      this.isTouching.top = true;
     }
-      else if (bodyA === this.sensors.top) {
-        this.isTouching.top = true;
-      }
   }
   resetTouching() {
     this.isTouching.top = false;
@@ -206,6 +220,7 @@ export default class Player {
     if (pointer.isDown && !this.hasAttacked) {
       console.log("attack");
       sprite.play("Attack1", true);
+      this.scene.sound.add("castSpell").play();
       this.hasAttacked = true;
       const self = this;
       setTimeout(() => {
@@ -216,6 +231,7 @@ export default class Player {
       if (isJumpKeyDown && isOnGround) {
         sprite.setVelocityY(-15);
         sprite.play("Jump", true);
+        this.scene.sound.add("whoosh", { volume: 0.3 }).play();
       }
       if (isLeftKeyDown) {
         if (isSprintKeyDown) {
@@ -238,10 +254,10 @@ export default class Player {
           }
           sprite.flipX = false;
         } else {
-            // implemented for level 4
-            if(!this.isTouching.top){
-              sprite.setVelocityX(7);
-            }
+          // implemented for level 4
+          if (!this.isTouching.top) {
+            sprite.setVelocityX(7);
+          }
           if (this.isTouching.ground) {
             sprite.play("Run", true);
           }

@@ -14,6 +14,8 @@ import inventory from "../assets/inventory.png";
 import gargoyle from "../assets/gargoyle.png";
 import king from "../assets/king.png";
 import inTheClouds from "../assets/sounds/InTheClouds.mp3";
+import whoosh from "../assets/sounds/whoosh.mp3";
+import castSpell from "../assets/sounds/castSpell.mp3";
 
 const helpText = `
 [i]: open inventory
@@ -40,25 +42,23 @@ export default class LoadScene extends Phaser.Scene {
     self.load.atlas("wizard", wizard, wizardJson);
     self.load.image("dialoguebox", dialoguebox);
     self.load.image("king", king);
-    self.load.audio("inTheClouds", inTheClouds);
+    self.load.audio("whoosh", whoosh);
+    self.load.audio("castSpell", castSpell);
   }
 
   create() {
     const self = this;
-    this.music = this.sound.add("inTheClouds", { volume: 0.5 });
     const text = this.add.text(400, 128, helpText, {
       font: "24px",
     });
     text.setScrollFactor(0);
     self.tutorial = new Dialogue(introDialogue, this, () => {
-      this.music.stop();
-      self.scene.start("lvl3");
+      self.scene.start("lvl4");
+      self.game.sound.stopAll();
     });
     setTimeout(() => {
       self.tutorial.startDialogue();
     }, 3000);
-
-    this.music.play();
   }
 
   update() {}

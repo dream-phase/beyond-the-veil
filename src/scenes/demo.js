@@ -86,7 +86,8 @@ export default class DemoScene extends Phaser.Scene {
     // }, 4000);
     //double check this to make sure it scales w browser
     var maps = this.make.tilemap({ key: "map" });
-    var tileset = castlemaps.addTilesetImage("btv", "tilessheet", 70, 70, 1, 2);
+
+    var tileset = maps.addTilesetImage("btv", "tilessheet", 70, 70, 1, 2);
     var backgroundImage = this.add
       .image(0, 0, "sky")
       .setOrigin(0, 0)

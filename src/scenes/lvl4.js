@@ -64,8 +64,8 @@ const createRotatingPlatform = (scene, x, y, numTiles = 5) => {
   //const platform = scene.add.image(x, y, wooden);
   scene.matter.add.gameObject(platform, {
     restitution: 0, // No bounciness
-    frictionAir: 0, // Spin forever without slowing down from air resistance
-    friction: 0.2, // A little extra friction so the player sticks better
+    frictionAir: 0.1, // Spin forever without slowing down from air resistance
+    friction: 0.3, // A little extra friction so the player sticks better
     // Density sets the mass and inertia based on area - 0.001 is the default. We're going lower
     // here so that the platform tips/rotates easily
     density: 0.005
@@ -181,7 +181,7 @@ export default class lvl4 extends Phaser.Scene {
     var castlebounds = castlemaps.createStaticLayer("lvl4bounds", tileset, 0, 0);
     var castleplatforms = castlemaps.createStaticLayer("lvl4platforms", tileset, 0, 0);
     var changers = castlemaps.createStaticLayer("changers", tileset, 0, 0);
-    var ropes = castlemaps.createStaticLayer("ropes", tileset, 0, 0);
+    var lava = castlemaps.createStaticLayer("lava", tileset, 0, 0);
 
     // create the rotating seesaws
     castlemaps.getObjectLayer("seesaws").objects.forEach(point =>{
@@ -189,12 +189,12 @@ export default class lvl4 extends Phaser.Scene {
     });
 
     changers.setCollisionByProperty({ collides: true });
-    ropes.setCollisionByProperty({ collides: true });
+    lava.setCollisionByProperty({ collides: true });
     castlebounds.setCollisionByProperty({ collides: true });
     castleplatforms.setCollisionByProperty({ collides: true });
     this.matter.world.convertTilemapLayer(changers);
     this.matter.world.convertTilemapLayer(castleplatforms);
-    this.matter.world.convertTilemapLayer(ropes);
+    this.matter.world.convertTilemapLayer(lava);
     this.matter.world.convertTilemapLayer(castlebounds);
 
     // Add player to scene and set camera bounds
@@ -323,27 +323,26 @@ export default class lvl4 extends Phaser.Scene {
   onPlayerCollide({ gameObjectB }) {
     if (!gameObjectB || !(gameObjectB instanceof Phaser.Tilemaps.Tile)) return;
     if (!this) return;
+    if (this.player.sprite.isStatic()) return;
     var tile = gameObjectB;
     //var isEnterKeyDown = this.jumpInput.isDown();
-
-    // Check the tile property set in Tiled (you could also just check the index if you aren't using
-    // Tiled in your game)
-    if (tile.layer.name == "ropes"){
-      this.player.sprite.setVelocityY(-15);
-      this.player.sprite.setVelocityX(-2);
-    }
+    console.log(tile);
     if (tile.properties.isLethal) {
       // Unsubscribe from collision events so that this logic is run only once
       console.log("yes");
-      this.unsubscribePlayerCollide();
 
       this.player.freeze();
       const cam = this.cameras.main;
       cam.fadeOut(500, 0, 0, 0);
+      console.log(cam.isTinted);
       cam.once("camerafadeoutcomplete", () => {
-        this.player.sprite.setPosition(107*70, 10*70);
         cam.fadeIn(500, 0, 0, 0);
+        this.player.sprite.setPosition(107*70, (10*70)+40);
       });
+      cam.once("camerafadeincomplete", () => {
+        this.player.unfreeze();
+      });
+
     }
   }
   //after alpha play with camera zoom for riddle section
@@ -354,7 +353,6 @@ export default class lvl4 extends Phaser.Scene {
       // Added 70 offset of Y to show more of the background and less of the ground
       this.cameras.main.startFollow(this.player.sprite,false,1,1,0,70);
     }
-
 
     if (pointer.isDown) {
       console.log(this.player.sprite.x, this.player.sprite.y)

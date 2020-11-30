@@ -210,25 +210,14 @@ export default class lvl3 extends Phaser.Scene {
     // Remember that adding to the game (Phaser) is not the same as adding a matter-js object
     let anchor = this.add.rectangle(600, 350, 1, 1, 0xff0000, 1);
 
-    // I use .this on variables I want to be able to access in the update method
-    // Here we will add the anchor (rectangle) we created in the Phaser canvas to matter-js
-    this.actualanchor = this.matter.add.gameObject(anchor);
-
-    // .setStatic(true)
-    // We want the rectangle to stay in place so it will act as an "Anchor" for the slingshot ball.
-    // setVisible(false);
-    // We also don't want the player to see the red rectangle we are using so we set it to invisible
-    this.actualanchor.setStatic(true).setVisible(false);
-    // Here we add a matter "constraint". This lets constrain two bodies to each other.
-    // The slingshot ball will be constrained to the static rectangle, keeping it in place.
-    // .body lets matter-js access the x and y positions of the object in our Phaser canvas
+    // Updated to correctly use a constraint instead of pseudo constraint
     this.secondConstraint = Phaser.Physics.Matter.Matter.Constraint.create({
-      bodyA: this.actualanchor.body,
+      pointA: {x: 600, y: 350},
       bodyB: this.red4.body,
       length: 0,
       stiffness: 0.05,
     });
-    // Adding the constraint to the matter-js world
+
     this.matter.world.add(this.secondConstraint);
 
     // Add score text
@@ -251,9 +240,6 @@ export default class lvl3 extends Phaser.Scene {
         this.scoreText.setText(this.playerScore + "/12 Orbs");
       },
     });
-
-    // Adding the constraint to the matter-js world
-    this.matter.world.add(this.secondConstraint);
   }
 
   onNextScene() {
@@ -264,6 +250,12 @@ export default class lvl3 extends Phaser.Scene {
     if(this.playerScore >= 12){
       this.onNextScene();
     }
+
+    if(!this.graphics) {
+      this.graphics = this.add.graphics();
+    }
+    this.graphics.clear();
+    this.matter.world.renderConstraint(this.secondConstraint, this.graphics, 0xFFFFFF, 1, 2, 1, 1, 1);
     // We want to make sure the next ball does not spawn before the previous one is already flying.
     // Above logic will prevent a launching ball from colliding with one that just spawned.
     // If position of old orb is lower than 330 (technically higher not lower since Phaser sets the origin at the top left (0,0))
@@ -301,22 +293,22 @@ export default class lvl3 extends Phaser.Scene {
 
     // Back and forth motion for scoreboxes "walls"
     if (this.wallRed.body.position.x >= 1150) {
-      this.wallRed.setVelocityX(-5);
+      this.wallRed.setVelocityX(-2);
     }
     if (this.wallRed.body.position.x <= 60) {
-      this.wallRed.setVelocityX(5);
+      this.wallRed.setVelocityX(2);
     }
     if (this.wallGreen.body.position.x >= 1150) {
-      this.wallGreen.setVelocityX(-6);
+      this.wallGreen.setVelocityX(-3);
     }
     if (this.wallGreen.body.position.x <= 60) {
-      this.wallGreen.setVelocityX(6);
+      this.wallGreen.setVelocityX(3);
     }
     if (this.wallBlue.body.position.x >= 1150) {
-      this.wallBlue.setVelocityX(-2);
+      this.wallBlue.setVelocityX(-1);
     }
     if (this.wallBlue.body.position.x <= 60) {
-      this.wallBlue.setVelocityX(2);
+      this.wallBlue.setVelocityX(1);
     }
   }
 }

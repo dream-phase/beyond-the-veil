@@ -148,6 +148,7 @@ export default class Player {
   update() {
     //if scene is changing or player is dead do not go to move manager
     if (this.destroyed) return;
+    if (this.isStatic) return;
     //console.log('x=',this.sprite.x,'y=',this.sprite.y);
     this.movePlayerManager();
     this.inventory.update();
@@ -259,6 +260,11 @@ export default class Player {
   freeze() {
     this.sprite.setStatic(true);
   }
+
+  unfreeze() {
+    this.sprite.setStatic(false);
+  }
+
   // destroy methtod for scene change or event of player death
   destroy() {
     // Clean up any listeners that might trigger events after the player is officially destroyed

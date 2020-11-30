@@ -1,45 +1,53 @@
 import Phaser from "phaser";
-
+import sky from "../assets/sky2.png";
 export default class puzzle3 extends Phaser.Scene {
   constructor() {
     super({ key: "puzzle3"});
   }
 
   preload(){
-
+    this.load.image("sky", sky);
   }
   create(){
+    this.add.image(0,0,"sky");
+
 
 
     // game board
-    var graphics = this.add.graphics({ fillStyle: { color: 0x0000aa } });
+    var graphics = this.add.graphics({ fillStyle: { color: 0x612f0b} });
     var tower1 = new Phaser.Geom.Rectangle(245, 100 , 10, 250);
     var tower2 = new Phaser.Geom.Rectangle(495, 100 , 10, 250);
     var tower3 = new Phaser.Geom.Rectangle(745, 100 , 10, 250);
+    var base1 = new Phaser.Geom.Rectangle(140,350,220,30);
+    var base2 = new Phaser.Geom.Rectangle(390,350,220,30);
+    var base3 = new Phaser.Geom.Rectangle(640,350,220,30);
 
     graphics.fillRectShape(tower1);
     graphics.fillRectShape(tower2);
     graphics.fillRectShape(tower3);
+    graphics.fillRectShape(base1);
+    graphics.fillRectShape(base2);
+    graphics.fillRectShape(base3);
 
-    var ring1graphics = this.make.graphics().fillStyle(0xaa0000).fillRect(0, 0, 50, 30);
+    var ring1graphics = this.make.graphics().fillStyle(0xd4b06a).fillRect(0, 0, 50, 30);
     ring1graphics.generateTexture('ring1', 50, 30);
     ring1graphics.destroy();
-    var ring2graphics = this.make.graphics().fillStyle(0xaa0000).fillRect(0, 0, 75, 30);
+    var ring2graphics = this.make.graphics().fillStyle(0xd4b06a).fillRect(0, 0, 75, 30);
     ring2graphics.generateTexture('ring2', 75, 30);
     ring2graphics.destroy();
-    var ring3graphics = this.make.graphics().fillStyle(0xaa0000).fillRect(0, 0, 100, 30);
+    var ring3graphics = this.make.graphics().fillStyle(0xd4b06a).fillRect(0, 0, 100, 30);
     ring3graphics.generateTexture('ring3', 100, 30);
     ring3graphics.destroy();
-    var ring4graphics = this.make.graphics().fillStyle(0xaa0000).fillRect(0, 0, 125, 30);
+    var ring4graphics = this.make.graphics().fillStyle(0xd4b06a).fillRect(0, 0, 125, 30);
     ring4graphics.generateTexture('ring4', 125, 30);
     ring4graphics.destroy();
-    var ring5graphics = this.make.graphics().fillStyle(0xaa0000).fillRect(0, 0, 150, 30);
+    var ring5graphics = this.make.graphics().fillStyle(0xd4b06a).fillRect(0, 0, 150, 30);
     ring5graphics.generateTexture('ring5', 150, 30);
     ring5graphics.destroy();
-    var ring6graphics = this.make.graphics().fillStyle(0xaa0000).fillRect(0, 0, 175, 30);
+    var ring6graphics = this.make.graphics().fillStyle(0xd4b06a).fillRect(0, 0, 175, 30);
     ring6graphics.generateTexture('ring6', 175, 30);
     ring6graphics.destroy();
-    var ring7graphics = this.make.graphics().fillStyle(0xaa0000).fillRect(0, 0, 200, 30);
+    var ring7graphics = this.make.graphics().fillStyle(0xd4b06a).fillRect(0, 0, 200, 30);
     ring7graphics.generateTexture('ring7', 200, 30);
     ring7graphics.destroy();
 
@@ -290,8 +298,11 @@ export default class puzzle3 extends Phaser.Scene {
 
   }
   update(){
-    if (this.t3==[7,6,5,4,3,2,1]) {
-      console.log("YOU WIN");
+    if (this.t3.length==7) {
+      this.onNextScene();
     }
+  }
+  onNextScene(){
+    console.log("NEXT SCENE")
   }
 }

@@ -12,11 +12,15 @@ export default class puzzle2 extends Phaser.Scene {
   }
 
   create() {
+    this.won = false
     this.add.image(0,0, "sky");
 
     //game board
-    var graphics = this.add.graphics({ lineStyle: { width: 2, color: 0x0000aa },
-  fillStyle: { color: 0xaa0000 }});
+    var graphics = this.add.graphics({ lineStyle: { width: 2, color: 0x612f0b },
+  fillStyle: { color: 0xd4b06a }});
+
+    var board1 = new Phaser.Geom.Rectangle()
+
     var rect = new Phaser.Geom.Rectangle(400, 60 , 180, 420);
     var rect1 = new Phaser.Geom.Rectangle(280, 180, 420, 180);
 
@@ -30,6 +34,8 @@ export default class puzzle2 extends Phaser.Scene {
     var line6 = new Phaser.Geom.Line(340, 180, 340, 360);
     var line7 = new Phaser.Geom.Line(640, 180, 640, 360);
 
+    graphics.fillRect(400,60,180,420);
+    graphics.fillRect(280,180,420,180);
     graphics.strokeRectShape(rect);
     graphics.strokeRectShape(rect1);
     graphics.strokeLineShape(line);
@@ -48,7 +54,7 @@ export default class puzzle2 extends Phaser.Scene {
     this.selected = false
     this.possibleMoves = []
     this.selectorGraphics = this.add.graphics({ fillStyle: { color: 0x00ff00 } });
-    this.pieceGraphics = this.add.graphics({ fillStyle: { color: 0xff0000 } });
+    this.pieceGraphics = this.add.graphics({ fillStyle: { color: 0x000 } });
 
     this.x = 0
     this.y = 0
@@ -59,12 +65,10 @@ export default class puzzle2 extends Phaser.Scene {
 
     this.restartButton = this.add.text(50, 50, 'RESTART', { fill: 0xff0000 });
     this.restartButton.setInteractive().on('pointerdown', () => this.restart());
-
-
   }
 
   onNextScene(){
-
+    console.log("NEXT SCENE")
   }
   update() {
 
@@ -175,14 +179,12 @@ export default class puzzle2 extends Phaser.Scene {
         this.pieces.splice(this.pieces.indexOf(idx1),1)
         this.pieces.push(this.x2.toString()+this.y2.toString())
 
+
       }
 
       this.selected = false
       console.log("unselected")
       this.selectorGraphics.clear();
-
-
-
 
     }
 
@@ -192,8 +194,16 @@ export default class puzzle2 extends Phaser.Scene {
 
       var circle = new Phaser.Geom.Circle(310+(60*(parseInt(this.pieces[i][0]))),
     90+(60*(parseInt(this.pieces[i][1]))),25);
-    //  var graphics = this.add.graphics({ fillStyle: { color: 0xff0000 } });
+
       this.pieceGraphics.fillCircleShape(circle);
+
+    }
+
+
+
+    if (this.pieces.length<=5){
+      this.continueButton = this.add.text(50, 150, 'CONTINUE', { fill: 0xff0000 });
+      this.continueButton.setInteractive().on('pointerdown', () => this.onNextScene());
 
     }
 
@@ -203,6 +213,7 @@ export default class puzzle2 extends Phaser.Scene {
 
 
   }
+
   restart() {
     this.selected = false
     this.selectorGraphics.clear()

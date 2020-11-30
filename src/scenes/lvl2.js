@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import sky from "../assets/sky2.png";
-import ts from "../assets/tiles/tiles_spritesheet.png";
+import ts from "../assets/tiles/tiles_spritesheet_extruded.png";
 import lvl2map from "../assets/lvl2.json";
 import doorpng from "../assets/door.png";
 import heroine from "../assets/heroine01.png";

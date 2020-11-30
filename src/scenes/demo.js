@@ -8,7 +8,7 @@ import wonderland from "../assets/sounds/alexander-nakarada-wonderland.mp3";
 import Dialogue from "../dialogue";
 import demoDialogue from "../dialogues/demoDialogue.json";
 import sky from "../assets/sky2.png";
-import ts from "../assets/tiles/tiles_spritesheet.png";
+import ts from "../assets/tiles/tiles_spritesheet_extruded.png";
 import mt from "../assets/map_tiled.json";
 import heroine from "../assets/heroine01.png";
 import Player from "../player.js";

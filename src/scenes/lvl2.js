@@ -172,7 +172,7 @@ export default class lvl2 extends Phaser.Scene {
 
     //var door = this.add.image(100,100,)
 
-    this.player = new Player(this, 600, 650);
+    this.player = new Player(this, 200, 650);
     this.cameras.main.setBounds(
       0,
       0,
@@ -184,9 +184,12 @@ export default class lvl2 extends Phaser.Scene {
       callback: this.onPlayerCollide,
       context: this,
     });
-    this.gargoyle = this.matter.add.sprite(1400, 660, "gargoyle");
+    this.gargoyle = this.matter.add.sprite(700, 660, "gargoyle");
     this.gargoyle.setScale(-3, 3);
-    const dialogue = new Dialogue(demoDialogue, this);
+    this.killedGargoyle = false;
+    const dialogue = new Dialogue(demoDialogue, this, () => {
+      this.killedGargoyle = true;
+    });
     setTimeout(() => {
       dialogue.startDialogue();
     }, 150);
@@ -194,7 +197,6 @@ export default class lvl2 extends Phaser.Scene {
 
   onNextScene() {
     this.player.freeze();
-    //this.scene.start("lvl3");
     this.scene.start("lvl4");
     //this.scene.start("puzzle3");
   }
@@ -236,7 +238,7 @@ export default class lvl2 extends Phaser.Scene {
         this.cameras.main.startFollow(this.player.sprite, false, 1, 1, 0, 70);
       }
     }
-    if (isEnterKeyDown) {
+    if (isEnterKeyDown && this.killedGargoyle) {
       console.log("go to next level");
       this.onNextScene();
     }

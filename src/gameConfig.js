@@ -3,7 +3,6 @@ import Phaser from "phaser";
 import LoadScene from "./scenes/load";
 import DemoScene from "./scenes/demo";
 import Level2 from "./scenes/lvl2";
-import Level3 from "./scenes/lvl3";
 import ThroneRoom from "./scenes/throneroom";
 import FadeToBlack from "./scenes/fadeToBlack";
 import Level4 from "./scenes/lvl4";
@@ -21,6 +20,7 @@ import {
   Composites,
 } from "matter-js";
 import PhaserMatterCollisionPlugin from "phaser-matter-collision-plugin";
+import Puzzle1 from "./scenes/puzzle1";
 
 export default {
   type: Phaser.AUTO,
@@ -36,10 +36,14 @@ export default {
     LoadScene,
     DemoScene,
     Level2,
+<<<<<<< HEAD
     Level3,
     Level4,
+=======
+>>>>>>> d11aaad... Fixed dialogues and new branches.
     ThroneRoom,
     FadeToBlack,
+    Puzzle1,
     Puzzle2,
     Puzzle3,
     Level4,

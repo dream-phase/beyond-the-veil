@@ -45,7 +45,7 @@ export default class LoadScene extends Phaser.Scene {
 
   create() {
     const self = this;
-    this.music = this.sound.add("inTheClouds");
+    this.music = this.sound.add("inTheClouds", { volume: 0.5 });
     const text = this.add.text(400, 128, helpText, {
       font: "24px",
     });

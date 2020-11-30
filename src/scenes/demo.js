@@ -5,6 +5,7 @@
 
 import Phaser from "phaser";
 import wonderland from "../assets/sounds/alexander-nakarada-wonderland.mp3";
+import whoosh from "../assets/sounds/whoosh.mp3";
 import Dialogue from "../dialogue";
 import demoDialogue from "../dialogues/demoDialogue.json";
 import sky from "../assets/sky2.png";
@@ -29,6 +30,8 @@ export default class DemoScene extends Phaser.Scene {
 
   preload() {
     this.load.audio("wonderland", wonderland);
+    this.load.audio("whoosh", whoosh);
+
     //just a test sprite for now
     //this.load.spritesheet('dude', '../assets/dude.png', { frameWidth: 32, frameHeight: 48 });
     //load sky
@@ -72,7 +75,9 @@ export default class DemoScene extends Phaser.Scene {
     this.shift = this.input.keyboard.addKey(
       Phaser.Input.Keyboard.KeyCodes.SHIFT
     );
-    this.music = this.sound.add("wonderland");
+    this.game.sound.stopAll();
+    this.sound.add("whoosh").play();
+    this.music = this.sound.add("wonderland", { volume: 0.75 });
     this.music.loop = true;
     this.music.play();
     var conversation = new Dialogue(demoDialogue, this);

@@ -222,7 +222,7 @@ export default class lvl4 extends Phaser.Scene {
     this.barrel.setScale(1.5);
 
     // Add player to scene and set camera bounds
-    this.player = new Player(this, 130, 3500);
+    this.player = new Player(this, 182 * 70, 16 * 70);
 
     // setting up variable for last barrel placed
     var prevbarrel;
@@ -389,10 +389,10 @@ export default class lvl4 extends Phaser.Scene {
 
     this.matterCollision.addOnCollideStart({
       objectA: this.player.sensors.top,
-      //objectB: this.barrel,
       callback: (eventData) => {
         // these constants are passed from the event to our callback method
         // bodies are the actual matter bodies and gameobjects are part of phaser
+        //fix this shit
         const { bodyA, bodyB, gameObjectA, gameObjectB, pair } = eventData;
         if (gameObjectB.layer.name == "changers" && gameObjectB.x == 187) {
           const currentIndex = puzzpics.indexOf(currentItem);
@@ -415,8 +415,8 @@ export default class lvl4 extends Phaser.Scene {
           this.image3.setTexture(currentItem3);
           //console.log(currentIndex3, nextIndex3, currentItem3);
         }
-        //console.log(gameObjectB.layer, gameObjectB.x);
       },
+      //console.log(gameObjectB.layer, gameObjectB.x);
     });
   }
 

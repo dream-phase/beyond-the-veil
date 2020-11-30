@@ -18,15 +18,15 @@ export default class ThroneRoom extends Phaser.Scene {
 
   create() {
     const self = this;
+    this.throneMusic = this.sound.add("withoutGod", { volume: 0.5 });
+    this.throneMusic.play();
     this.tutorial = new Dialogue(throneroomDialogue, this, () => {
-      self.scene.start("fade-black");
+      self.scene.start("fade-black", { throneMusic: this.throneMusic });
     });
     this.add.image(1000, 150, "throneroomImg");
     this.add.image(330, 310, "king").setScale(1.6);
     const player = new Player(this, 220, 300);
     player.freeze();
-    this.throneMusic = this.sound.add("withoutGod");
-    this.throneMusic.play();
     self.tutorial.startDialogue();
   }
 }

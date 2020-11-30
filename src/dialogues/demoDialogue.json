@@ -125,8 +125,7 @@
           },
           {
             "speaker": "Guardian",
-            "line": "Very well, pass through.",
-            "variables": [{ "name": "canPass", "value": true }],
+            "line": "You must attack me!",
             "end": true
           }
         ]

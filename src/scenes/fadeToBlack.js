@@ -7,10 +7,14 @@ export default class FadeToBlack extends Phaser.Scene {
     super({ key: "fade-black" });
   }
 
+  init(data) {
+    this.throneMusic = data.throneMusic;
+  }
+
   create() {
     const self = this;
     const dialogue = new Dialogue(afterThrone, this, () => {
-      self.scene.start("lvl3");
+      self.scene.start("Puzzle1");
     });
     dialogue.startDialogue();
   }

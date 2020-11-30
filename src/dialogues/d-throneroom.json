@@ -2,7 +2,7 @@
   "subtree": [
     {
       "speaker": "Oracle",
-      "line": "Your highness. (The oracle bows)"
+      "line": "Your highness (the oracle bows)."
     },
     {
       "speaker": "King Nico",
@@ -14,7 +14,7 @@
     },
     {
       "speaker": "King Nico",
-      "line": "Sir Anders is dead."
+      "line": "I must report to you that Sir Anders is dead."
     },
     {
       "speaker": "Oracle",

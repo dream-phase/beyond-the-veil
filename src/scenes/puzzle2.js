@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import sky from "../assets/sky2.png";
 import Dialogue from "../dialogue";
 import checkers from "../dialogues/d-checkers.json";
+import orion from "../assets/orion.mp4";
 
 export default class puzzle2 extends Phaser.Scene {
   constructor() {
@@ -9,14 +10,30 @@ export default class puzzle2 extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("sky", sky);
+    this.load.video("orion", orion, "loadeddata", false, true);
   }
 
   create() {
+    console.log("test");
+    // Add video
+    var video = this.add.video(0, 0, "orion").setOrigin(0, 0);
+    // Let it loop
+    video.play(true);
+    // If the video pauses due to browser constraints, resume it
+    var timers = this.time.addEvent({
+      delay: 1000,
+      callback: function () {
+        if(!video.isPlaying()){
+          video.setPaused(false);
+        }
+      },
+      callbackScope: this,
+      loop: true,
+    });
+
     this.inDialogue = true;
 
     this.won = false;
-    this.add.image(0, 0, "sky").setScale(2);
 
     //game board
     var graphics = this.add.graphics({

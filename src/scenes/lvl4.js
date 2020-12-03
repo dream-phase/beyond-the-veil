@@ -23,6 +23,8 @@ import clouds_3 from "../assets/clouds_3.png";
 import clouds_4 from "../assets/clouds_4.png";
 import rocks_1 from "../assets/rocks_1.png";
 import rocks_2 from "../assets/rocks_2.png";
+import mtnbottom from "../assets/mtnbottom.png";
+import mtnbottom2 from "../assets/mtnbottom2.png";
 import lvl4sky from "../assets/lvl4sky.png";
 
 // Riddle puzzle assets
@@ -38,13 +40,15 @@ import switchSnd from "../assets/sounds/switch.mp3";
 
 import PhaserMatterCollisionPlugin from "phaser-matter-collision-plugin";
 import multiKey from "../multiKey.js";
+import puzzle2 from "../scenes/puzzle2.js";
 
 // Allows us to create scrollable parallax backgrounds through calling a method
 const createAligned = (scene, totalWidth, texture, scrollFactor, height) => {
   const w = scene.textures.get(texture).getSourceImage().width;
-  const count = Math.ceil(totalWidth / w) * scrollFactor;
+  var count = Math.ceil(totalWidth / w) * scrollFactor;
+  count = count + 2;
 
-  let x = 0;
+  let x = -1000;
   for (let i = 0; i < count; ++i) {
     const m = scene.add
       .image(x, height, texture)
@@ -101,6 +105,8 @@ export default class lvl4 extends Phaser.Scene {
     this.load.image("tilessheet", ts);
 
     // Parallax assets
+    this.load.image("mtnbottom", mtnbottom);
+    this.load.image("mtnbottom2", mtnbottom2);
     this.load.image("clouds_1", clouds_1);
     this.load.image("clouds_2", clouds_2);
     this.load.image("clouds_3", clouds_3);
@@ -108,6 +114,7 @@ export default class lvl4 extends Phaser.Scene {
     this.load.image("lvl4sky", lvl4sky);
     this.load.image("rocks_1", rocks_1);
     this.load.image("rocks_2", rocks_2);
+
     this.load.image("barrel", barrel);
     this.load.image("wooden", wooden);
     this.load.image("dog", dog);
@@ -166,11 +173,15 @@ export default class lvl4 extends Phaser.Scene {
     console.log(height);
 
     // Setting parallax background
-    this.add.image(width * 0.5, height * 0.5, "lvl4sky").setScrollFactor(0);
+    this.add.image(width * 0.5, height * 0.5, "lvl4sky").setScrollFactor(0).setScale(2);
 
     // Use createAligned method defined above to allow scrolling
+    createAligned(this, totalWidth, "mtnbottom", 0.1, 1270);
+    createAligned(this, totalWidth, "mtnbottom2", 0.2, 1770);
     createAligned(this, totalWidth, "rocks_1", 0.1, 900);
+
     createAligned(this, totalWidth, "rocks_2", 0.2, 1370);
+
     createAligned(this, totalWidth, "clouds_1", 0.4, 1200);
     createAligned(this, totalWidth, "clouds_2", 0.5, 1200);
     createAligned(this, totalWidth, "clouds_3", 0.6, 1200);
@@ -376,21 +387,34 @@ export default class lvl4 extends Phaser.Scene {
     this.scene.start("puzzle2");
   }
 
+  applyPipeline() {
+    this.Vignette.setFloat2('resolution', this.game.config.width, this.game.config.heigt);
+    this.Vignette.setFloat1('r',0.2);
+    this.Vignette.setFloat1('b',0.9);
+    this.Vignette.setFloat1('tx', 0.8);
+    this.Vignette.setFloat1('ty', 0.8);
+    this.Vignette.setFloat1('bright', 1.0);
+    this.Vignette.setFloat1('red', 1.0);
+    this.Vignette.setFloat1('green', 1.0);
+    this.Vignette.setFloat1('blue', 1.0);
+    this.Vignette.setFloat1('bgred', 1.0);
+    this.Vignette.setFloat1('bggreen', 1.0);
+    this.Vignette.setFloat1('bgblue', 1.0);
+    this.cameras.main.setRenderToTexture(this.Vignette);
+  }
+
   onPlayerCollide({ gameObjectB }) {
     if (!gameObjectB || !(gameObjectB instanceof Phaser.Tilemaps.Tile)) return;
     if (!this) return;
     if (this.player.sprite.isStatic()) return;
     var tile = gameObjectB;
     //var isEnterKeyDown = this.jumpInput.isDown();
-    console.log(tile);
     if (tile.properties.isLethal) {
       // Unsubscribe from collision events so that this logic is run only once
-      console.log("yes");
 
       this.player.freeze();
       const cam = this.cameras.main;
       cam.fadeOut(500, 0, 0, 0);
-      console.log(cam.isTinted);
       cam.once("camerafadeoutcomplete", () => {
         cam.fadeIn(500, 0, 0, 0);
         this.player.sprite.setPosition(107 * 70, 10 * 70 + 40);
@@ -409,6 +433,18 @@ export default class lvl4 extends Phaser.Scene {
       this.cameras.main.startFollow(this.player.sprite, false, 1, 1, 0, 70);
     }
 
+    if(this.player.sprite.x >= 48*70){
+      this.cameras.main.zoomTo(0.5, 1000, "Quad");
+    }
+
+    if(this.player.sprite.x <= 48*70){
+      this.cameras.main.zoomTo(1.0, 1000, "Quad");
+    }
+
+    if(this.player.sprite.x >= 182 *70){
+      this.cameras.main.zoomTo(1.0, 1000, "Quad", true);
+    }
+
     if (pointer.isDown) {
       console.log(this.player.sprite.x, this.player.sprite.y);
     }
@@ -418,8 +454,8 @@ export default class lvl4 extends Phaser.Scene {
       this.image3.texture.key == "time"
     ) {
       const cam = this.cameras.main;
-      cam.fade(250, 0, 0, 0);
-      cam.once("camerafadeoutcomplete", () => this.onNextScene());
+      this.cameras.main.zoomTo(1);
+      this.onNextScene();
     }
   }
 }

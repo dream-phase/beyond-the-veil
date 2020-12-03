@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import lvl3sky from "../assets/sky.png";
+import space from "../assets/space.mp4";
 import MouseConstraint from "matter-js";
 import PhaserMatterCollisionPlugin from "phaser-matter-collision-plugin";
 import multiKey from "../multiKey.js";
@@ -21,7 +21,7 @@ export default class Puzzle1 extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("lvl3sky", lvl3sky);
+    this.load.video("space", space, "loadeddata", false, true);
     this.load.image("blueOrb", blueOrb);
     this.load.image("greenOrb", greenOrb);
     this.load.image("brickWall", brickWall);
@@ -65,26 +65,27 @@ export default class Puzzle1 extends Phaser.Scene {
       label: "redOrb",
     });
 
-    this.add.image(0, 0, "sky").setOrigin(0, 0);
+    // Add video
+    var video = this.add.video(0, 0, "space").setOrigin(0, 0);
+    // Let it loop
+    video.play(true);
+    // If the video pauses due to browser constraints, resume it
+    var timers = this.time.addEvent({
+      delay: 1000,
+      callback: function () {
+        if(!video.isPlaying()){
+          video.setPaused(false);
+        }
+      },
+      callbackScope: this,
+      loop: true,
+    });
+
     // No walls so balls will fly infinitely
     this.matter.world.setBounds(0, 0, 944, 544, 70, false, false, false, false);
-    var blue = this.matter.add.image(400, 300, "blueOrb");
-    var blue2 = this.matter.add.image(450, 300, "blueOrb");
-    var blue3 = this.matter.add.image(120, 300, "blueOrb");
-    var blue4 = this.matter.add.image(300, 300, "blueOrb");
-    var blue5 = this.matter.add.image(450, 300, "blueOrb");
-    var red = this.matter.add.image(220, 300, "redOrb");
-    var red2 = this.matter.add.image(440, 300, "redOrb");
-    var red3 = this.matter.add.image(100, 300, "redOrb");
     this.red4 = this.matter.add.image(500, 350, "redOrb", null, {
       label: "redOrb",
     });
-    var red5 = this.matter.add.image(380, 300, "redOrb");
-    var green = this.matter.add.image(110, 300, "greenOrb");
-    var green2 = this.matter.add.image(220, 300, "greenOrb");
-    var green3 = this.matter.add.image(370, 300, "greenOrb");
-    var green4 = this.matter.add.image(420, 300, "greenOrb");
-    var green5 = this.matter.add.image(430, 300, "greenOrb");
 
     // x, y, image, null, inertia: Infinity will ensure that block loses no velocity on bounce
     // Don't want player to move scoreboxes "walls" so ignorePointer
@@ -127,36 +128,6 @@ export default class Puzzle1 extends Phaser.Scene {
     this.wallGreen.setVelocityX(6);
     this.wallBlue.setVelocityX(3);
 
-    this.red4.setCircle();
-    this.red4.setBounce(0.8);
-    this.red4.setFriction(0.05);
-
-    // Mouse control
-    blue.setCircle();
-    blue.setBounce(0.8);
-    blue.setFriction(0.05);
-    blue2.setCircle();
-    blue2.setBounce(0.8);
-    blue2.setFriction(0.05);
-    blue3.setCircle();
-    blue3.setBounce(0.8);
-    blue3.setFriction(0.05);
-    blue4.setCircle();
-    blue4.setBounce(0.8);
-    blue4.setFriction(0.05);
-    blue5.setCircle();
-    blue5.setBounce(0.8);
-    blue5.setFriction(0.05);
-
-    red.setCircle();
-    red.setBounce(0.8);
-    red.setFriction(0.05);
-    red2.setCircle();
-    red2.setBounce(0.8);
-    red2.setFriction(0.05);
-    red3.setCircle();
-    red3.setBounce(0.8);
-    red3.setFriction(0.05);
     this.red4.setCircle();
     this.red4.setBounce(0.8);
     this.red4.setFriction(0.05);

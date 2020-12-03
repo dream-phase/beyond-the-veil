@@ -32,15 +32,6 @@ export default class DemoScene extends Phaser.Scene {
     this.load.audio("wonderland", wonderland);
     this.load.audio("whoosh", whoosh);
 
-    //just a test sprite for now
-    //this.load.spritesheet('dude', '../assets/dude.png', { frameWidth: 32, frameHeight: 48 });
-    //load sky
-    //Load player json/atlas for animations
-    //this.load.atlas('player', playerjson);
-    //Loading the spritesheet for tiles
-    /*this.load.onLoadStart.add(loadStart, this);
-    this.load.onFileComplete.add(fileComplete, this);
-    this.load.onLoadComplete.add(loadComplete, this);*/
     this.load.image("tilessheet", ts);
 
     //Loading exported TiledMap created in Tiled

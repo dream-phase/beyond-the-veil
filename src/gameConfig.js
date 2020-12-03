@@ -39,11 +39,11 @@ export default {
     DemoScene,
     Level2,
     Level4,
+    Puzzle2,
+    Puzzle3,
     ThroneRoom,
     FadeToBlack,
     Puzzle1,
-    Puzzle2,
-    Puzzle3,
   ],
   physics: {
     //converted to Matter-js to allow for polygon collision boxes

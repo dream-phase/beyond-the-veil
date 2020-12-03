@@ -1,8 +1,8 @@
 import Phaser from "phaser";
-import sky from "../assets/sky2.png";
 import Dialogue from "../dialogue";
 import tower from "../dialogues/d-tower.json";
 import finalTruth from "../dialogues/d-finalTruth.json";
+import bluespace from "../assets/bluespace.mp4";
 
 export default class puzzle3 extends Phaser.Scene {
   constructor() {
@@ -10,10 +10,24 @@ export default class puzzle3 extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("sky", sky);
+    this.load.video("bluespace", bluespace, "loadeddata", false, true);
   }
   create() {
-    this.add.image(0, 0, "sky").setScale(2);
+    // Add video
+    var video = this.add.video(0, 0, "bluespace").setOrigin(0, 0);
+    // Let it loop
+    video.play(true);
+    // If the video pauses due to browser constraints, resume it
+    var timers = this.time.addEvent({
+      delay: 1000,
+      callback: function () {
+        if(!video.isPlaying()){
+          video.setPaused(false);
+        }
+      },
+      callbackScope: this,
+      loop: true,
+    });
 
     // game board
     var graphics = this.add.graphics({ fillStyle: { color: 0x612f0b } });
